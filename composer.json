@@ -1,0 +1,33 @@
+{
+	"authors": [
+		{
+			"name": "Khalifah Shabazz",
+			"homepage": "http://www.kshabazz.net",
+			"role": "Developer"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Kshabazz\\Interception\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Kshabazz\\Tests\\Interception\\": "tests/"
+		}
+	},
+	"description": "A PHP library that intercepts stream wrappers.",
+	"keywords": ["unit testing", "http", "interception"],
+	"license": "MIT",
+	"name": "kshabazz/interception",
+	"require": {
+		"php": ">=5.6.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit-mock-objects": ">=2.1",
+		"phpunit/php-code-coverage": ">=2.0",
+		"phpunit/phpunit": ">=4.1",
+		"squizlabs/php_codesniffer": ">=1.5"
+	},
+	"type": "library"
+}
