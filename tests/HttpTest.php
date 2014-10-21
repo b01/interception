@@ -25,11 +25,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		$this->assertContains( 'HTTP/1.0 200 OK', $content );
 	}
 
+	/**
+	 * @expectedException \PHPUnit_Framework_Error
+	 * @expectedExceptionMessage Only read mode is supported
+	 */
 	public function test_http_interception_of_fopen_invalid_mode()
 	{
-		$this->markTestIncomplete('TODO');
 		\fopen( 'http://www.example.com', 'w' );
-
 	}
 
 	public function test_http_interception_of_file_get_contents()
