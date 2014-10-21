@@ -16,8 +16,8 @@
 			"Kshabazz\\Tests\\Interception\\": "tests/"
 		}
 	},
-	"description": "A PHP library that intercepts stream wrappers.",
-	"keywords": ["unit testing", "http", "interception"],
+	"description": "A PHP library that acts as a middleman for stream wrapper functions, such as fopen and fsockopen; in order to record network request and played them back.",
+	"keywords": ["unit testing", "stream", "interception"],
 	"license": "MIT",
 	"name": "kshabazz/interception",
 	"require": {
