@@ -9,6 +9,6 @@ require_once __DIR__
 
 // Set fixture path constant.
 $fixturesPath = realpath( __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' );
-define( 'FIXTURES_PATH', $fixturesPath . DIRECTORY_SEPARATOR );
+define( 'FIXTURES_PATH', $fixturesPath );
 
 ?>
