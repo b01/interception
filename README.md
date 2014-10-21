@@ -37,8 +37,22 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function test_http_interception_of_file_get_contents()
     {
+        // will generate a file the file:  ./fixtures/example-com.rsd
         $content = \file_get_contents( 'http://www.example.com' );
         $this->assertContains( 'HTTP/1.0 200 OK', $content );
+    }
+
+    public function test_setSaveFile()
+    {
+        // You can also specify the filename for the local cache.
+        Http::setSaveFilename( 'test-example' );
+
+        // Will generate a file the file:  ./fixtures/test-example.rsd
+        \file_get_contents( 'http://www.example.com' );
+
+        $file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
+        $this->assertTrue( \file_exists($file) );
+        unlink( $file );
     }
 }
 ```
