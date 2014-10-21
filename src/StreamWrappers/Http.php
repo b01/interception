@@ -111,7 +111,7 @@ class Http
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile( $this->url[ 'host' ] );
-
+		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
 			$this->type = self::TYPE_FILE;
@@ -121,13 +121,12 @@ class Http
 		{
 			$this->type = self::TYPE_SOCKET;
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
-			$this->resource = \fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
-
+			$this->resource = @\fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
+			// Alert the developer when there is an error connecting.
 			if ( $this->resource === FALSE )
 			{
-				throw new \Exception( 'Unable to connect to ' . $this->url['host'] );
+				\trigger_error( 'Unable to connect to ' . $this->url['host'] . "\nReason: " . $errorStr );
 			}
-
 			$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
 			$headers = \sprintf( "GET %s HTTP/1.0\r\nHost: %s\r\n\r\n", $page, $this->url['host'] );
 			// Setup the context so we can read from the socket.

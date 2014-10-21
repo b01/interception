@@ -7,7 +7,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		\stream_wrapper_unregister( 'http' );
-		Http::setSaveDir( FIXTURES_PATH . DIRECTORY_SEPARATOR );
+		Http::setSaveDir( FIXTURES_PATH );
 
 		\stream_register_wrapper(
 			'http',
@@ -23,7 +23,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	public function test_http_interception_of_fopen()
 	{
-		$handle = \fopen( 'http://www.google.com', 'r' );
+		$handle = \fopen( 'http://www.example.com', 'r' );
 		$content = \fread( $handle, 100 );
 		\fclose( $handle );
 		$this->assertContains( 'HTTP/1.0 200 OK', $content );
@@ -45,27 +45,27 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @uses Http::setSaveFilename()
+	 * @uses \Kshabazz\Interception\StreamWrappers\Http::setSaveFilename()
 	 */
 	public function test_setSaveFile()
 	{
-		$fileName = 'example-102120140915';
+		$fileName = 'ignore-example-' . date('mdYhi');
 		Http::setSaveFilename( $fileName );
 		\file_get_contents( 'http://www.example.com/test' );
 		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
 		$this->assertTrue( \file_exists($file) );
+		unlink( $file );
 	}
 
 	/**
-	 * @uses Http::setSaveFilename()
+	 * @uses \Kshabazz\Interception\StreamWrappers\Http::setSaveFilename()
 	 * @expectedException \PHPUnit_Framework_Error
 	 * @expectedExceptionMessage A filename cannot contain the following characters
 	 */
-	public function test_setSaveFile_with_invalid_name()
+	public function test_setSaveFilename_with_invalid_name()
 	{
 		$fileName = 'test,<>';
-		Http::setSaveFilename( $fileName );
-		$this->assertEquals( '', Http::getSaveFilename() );
+		$this->assertFalse( Http::setSaveFilename($fileName) );
 	}
 
 	/**
@@ -75,8 +75,21 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		// Set an invalid directory.
 		Http::setSaveDir( 'test' );
-		$dir = FIXTURES_PATH;
-		$this->assertEquals( $dir, Http::getSaveDir() );
+		$this->assertEquals( FIXTURES_PATH, Http::getSaveDir() );
+	}
+
+	/**
+	 * This makes a real network call to example.com.
+	 * @expectedException \PHPUnit_Framework_Error
+	 * @expectedExceptionMessage Unable to connect to test.example.com
+	 */
+	public function test_http_live_stream_trigger_error()
+	{
+		Http::setSaveFilename( 'ignore-live-stream-not-found' );
+		$handle = \fopen( 'http://test.example.com/', 'r' );
+		$content = \fread( $handle, 100 );
+		\fclose( $handle );
+		$this->assertContains( 'HTTP/1.0 200 OK', $content );
 	}
 }
 ?>
