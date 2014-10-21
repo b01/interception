@@ -4,7 +4,7 @@ use \Kshabazz\Interception\StreamWrappers\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-	public function setUp()
+	static public function setUpBeforeClass()
 	{
 		\stream_wrapper_unregister( 'http' );
 		Http::setSaveDir( FIXTURES_PATH );

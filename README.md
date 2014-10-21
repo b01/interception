@@ -19,7 +19,7 @@ use \Kshabazz\Interception\StreamWrappers\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    static public function setUpBeforeClass()
     {
         // Unregister the built-in PHP HTTP protocol stream wrapper.
         \stream_wrapper_unregister( 'http' );
@@ -33,6 +33,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             '\\Kshabazz\\Interception\\StreamWrappers\\Http',
             \STREAM_IS_URL
         );
+    }
+
+    static public function tearDownAfterClass()
+    {
+        stream_wrapper_restore( 'http' );
     }
 
     public function test_http_interception_of_file_get_contents()
