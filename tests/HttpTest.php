@@ -51,10 +51,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		$fileName = 'ignore-example-' . date('mdYhi');
 		Http::setSaveFilename( $fileName );
-		\file_get_contents( 'http://www.example.com/test' );
+		\file_get_contents( 'http://www.example.com' );
 		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
 		$this->assertTrue( \file_exists($file) );
-		unlink( $file );
+		\unlink( $file );
 	}
 
 	/**
