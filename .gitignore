@@ -4,3 +4,4 @@ composer.lock
 composer.phar
 *.log
 .DS_Store
+tests/fixtures/ignore*
