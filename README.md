@@ -1,10 +1,13 @@
-The purpose of this library is to record the request of URI resources and play them back from local cache. When an
+The purpose of this library is to record the request (1) of URI resources and play them back from local cache. When an
 interception stream wrapper is registered, for a given protocol, it will handle all URI request for that protocol.
 Acting as a middleman, the first request will be allowed so that it can be saved locally; this save is then played back
 for all subsequent calls. Please note that playback is indefinite, until the local cache is deleted, or the interception
 stream wrapper is unregistered.
 
-** Disclaimer: This library only work with PHP stream. The PHP cURL extension is not supported. **
+** Disclaimer: This library will only work with PHP streams. Other PHP extensions such as cURL, are not supported. **
+
+1 request - consist of the headers and the payload are saved as *.rsd
+2 rsd - stand for "raw socket data" file. No encoding is done.
 
 
 ## Examples

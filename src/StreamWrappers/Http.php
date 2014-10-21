@@ -21,7 +21,9 @@ class Http
 
 	public static
 		/** @var string Directory to save raw files. */
-		$rawSaveDir = '.';
+		$saveDir = '.',
+		/** @var string */
+		$saveFile = '';
 
 	private
 		/** @var string */
@@ -54,10 +56,13 @@ class Http
 		if ( \is_resource($this->resource) )
 		{
 			\fclose( $this->resource );
+
 			if ( !empty($this->content) )
 			{
-				$saveFile = $this->convertUrlToFileName( $this->url );
-				file_put_contents( $saveFile, $this->content );
+				$saveFile = $this->getSaveFile( $this->url[ 'host' ] );
+				\file_put_contents( $saveFile, $this->content );
+				// Reset so we do not overwrite unintentionally for the next request.
+				self::clearSaveFile();
 			}
 		}
 	}
@@ -71,6 +76,8 @@ class Http
 	}
 
 	/**
+	 * TODO: Implement.
+	 *
 	 * @param string $path
 	 * @param int $option
 	 * @param mixed $value
@@ -78,7 +85,7 @@ class Http
 	 */
 	public function stream_metadata( $path, $option, $value )
 	{
-
+		return NULL;
 	}
 
 	/**
@@ -102,14 +109,13 @@ class Http
 		// TODO: Find out what needs to happen when the path is already open.
 
 		$this->url = \parse_url( $pPath );
-
 		// See if we have a save file for this request.
-		$rawFile = $this->convertUrlToFileName( $this->url );
+		$localFile = $this->getSaveFile( $this->url[ 'host' ] );
 
-		if ( \file_exists($rawFile) )
+		if ( \file_exists($localFile) )
 		{
 			$this->type = self::TYPE_FILE;
-			$this->resource = \fopen( $rawFile, 'r' );
+			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
@@ -147,6 +153,8 @@ class Http
 	}
 
 	/**
+	 * TODO: Find out why this is trigger when using \file_get_contents().
+	 *
 	 * @return array
 	 */
 	public function stream_stat()
@@ -160,38 +168,85 @@ class Http
 	 *
 	 * @return string
 	 */
-	public static function getSaveDir()
+	static public function getSaveDir()
 	{
-		return self::$rawSaveDir;
+		return self::$saveDir;
 	}
 
 	/**
-	 * Set where to save raw socket data files.
+	 * Get save file name.
+	 *
+	 * @return string
+	 */
+	static public function getSaveFilename()
+	{
+		return self::$saveFile;
+	}
+
+	/**
+	 * Set directory to save socket data files.
 	 *
 	 * @param $pDirectory
 	 * @return bool
 	 */
-	public static function setSaveDir( $pDirectory )
+	static public function setSaveDir( $pDirectory )
 	{
 		if ( \is_dir($pDirectory) )
 		{
-			self::$rawSaveDir = \realpath( $pDirectory );
+			self::$saveDir = \realpath( $pDirectory );
 			return TRUE;
 		}
 		return FALSE;
 	}
 
 	/**
-	 * Verify if the URL being request has already been save on disk.
+	 * Set the file name for the local file.
 	 *
-	 * @param array $pParseUrl
+	 * @param $pFilename
 	 * @return bool
 	 */
-	private function convertUrlToFileName( array $pParseUrl )
+	static public function setSaveFilename( $pFilename )
 	{
-		$fileName = \str_replace('.', '-', $pParseUrl['host'] );
+		// A filename must not contain the following chars:
+		$invalidChars = [ ',', '<', '>', '*', '?', '|', '\\', '/', "'", '"', ':' ];
+		// Build regular expression.
+		$invalidCharRegExPatter = '@'. implode( $invalidChars ) . '@';
+
+		// Notify the developer when a filename contains invalid characters.
+		if ( \preg_match($invalidCharRegExPatter, $pFilename) === 1 )
+		{
+			\trigger_error( 'A filename cannot contain the following characters: ' . implode('', $invalidChars) );
+			return FALSE;
+		}
+
+		self::$saveFile = $pFilename;
+		return TRUE;
+	}
+
+	/**
+	 * Get the full file path by generating one from the URL, or the one set by the developer.
+	 *
+	 * @param string $pUrl
+	 * @return bool
+	 */
+	private function getSaveFile( $pUrl )
+	{
+		$filename = self::getSaveFilename();
+		// When not set by the developer.
+		if ( empty($filename) )
+		{
+			$filename = \str_replace( '.', '-', $pUrl );
+		}
 		$ext = '.rsd';
-		return self::getSaveDir() . DIRECTORY_SEPARATOR . $fileName . $ext;
+		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
+	}
+
+	/**
+	 * Clear the save file name.
+	 */
+	static private function clearSaveFile()
+	{
+		self::$saveFile = '';
 	}
 }
 ?>

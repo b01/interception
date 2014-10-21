@@ -4,7 +4,6 @@ use \Kshabazz\Interception\StreamWrappers\Http;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-
 	public function setUp()
 	{
 		\stream_wrapper_unregister( 'http' );
@@ -15,6 +14,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 			'\\Kshabazz\\Interception\\StreamWrappers\\Http',
 			\STREAM_IS_URL
 		);
+	}
+
+	static public function tearDownAfterClass()
+	{
+		stream_wrapper_restore( 'http' );
 	}
 
 	public function test_http_interception_of_fopen()
@@ -38,6 +42,41 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		$content = \file_get_contents( 'http://www.example.com' );
 		$this->assertContains( 'HTTP/1.0 200 OK', $content );
+	}
+
+	/**
+	 * @uses Http::setSaveFilename()
+	 */
+	public function test_setSaveFile()
+	{
+		$fileName = 'example-102120140915';
+		Http::setSaveFilename( $fileName );
+		\file_get_contents( 'http://www.example.com/test' );
+		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
+		$this->assertTrue( \file_exists($file) );
+	}
+
+	/**
+	 * @uses Http::setSaveFilename()
+	 * @expectedException \PHPUnit_Framework_Error
+	 * @expectedExceptionMessage A filename cannot contain the following characters
+	 */
+	public function test_setSaveFile_with_invalid_name()
+	{
+		$fileName = 'test,<>';
+		Http::setSaveFilename( $fileName );
+		$this->assertEquals( '', Http::getSaveFilename() );
+	}
+
+	/**
+	 * @uses \Kshabazz\Interception\StreamWrappers\Http::setSaveDir()
+	 */
+	public function test_setSaveDir_with_invalid_dir()
+	{
+		// Set an invalid directory.
+		Http::setSaveDir( 'test' );
+		$dir = FIXTURES_PATH;
+		$this->assertEquals( $dir, Http::getSaveDir() );
 	}
 }
 ?>
