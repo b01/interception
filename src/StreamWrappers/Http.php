@@ -10,12 +10,6 @@
  */
 class Http
 {
-	const
-		/** @var int Resource type */
-		TYPE_FILE = 2,
-		/** @var int Resource type */
-		TYPE_SOCKET = 2;
-
 	/** @var resource */
 	public $context;
 
@@ -30,8 +24,6 @@ class Http
 		$content,
 		/** @var resource */
 		$resource,
-		/** @Var int */
-		$type,
 		/** @var string */
 		$url;
 
@@ -42,7 +34,6 @@ class Http
 	{
 		$this->content = NULL;
 		$this->resource = NULL;
-		$this->tyep = NULL;
 		$this->url = NULL;
 	}
 
@@ -114,12 +105,10 @@ class Http
 		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
-			$this->type = self::TYPE_FILE;
 			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
-			$this->type = self::TYPE_SOCKET;
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
 			$this->resource = @\fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
 			// Alert the developer when there is an error connecting.
