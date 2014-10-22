@@ -8,10 +8,12 @@
  *
  * @package Kshabazz\Interception\StreamWrappers
  */
-class Http
+class Http implements \ArrayAccess
 {
-	/** @var resource */
-	public $context;
+	public
+		/** @var resource */
+		$context,
+		$position;
 
 	public static
 		/** @var string Directory to save raw files. */
@@ -22,10 +24,14 @@ class Http
 	private
 		/** @var string */
 		$content,
+		/** @var bool */
+		$areHeadersSet,
 		/** @var resource */
 		$resource,
 		/** @var string */
-		$url;
+		$url,
+		/** @var array */
+		$wrapperData;
 
 	/**
 	 * Constructor
@@ -33,8 +39,49 @@ class Http
 	public function __construct()
 	{
 		$this->content = NULL;
+		$this->position = 0;
 		$this->resource = NULL;
 		$this->url = NULL;
+		$this->wrapperData = [];
+	}
+
+	/**
+	 * Allow access via indices.
+	 *
+	 * @param mixed $pKey
+	 * @return bool
+	 */
+	public function offsetExists( $pKey )
+	{
+		return \array_key_exists( $pKey, $this->wrapperData );
+	}
+
+	/**
+	 * Allow access via indices.
+	 *
+	 * @param mixed $pKey
+	 * @return bool
+	 */
+	public function offsetGet( $pKey )
+	{
+		return $this->wrapperData[ $pKey ];
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * @param mixed $pKey
+	 * @param mixed $pValue
+	 */
+	public function offsetSet( $pKey, $pValue )
+	{
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 * @param mixed $pKey
+	 */
+	public function offsetUnset( $pKey )
+	{
 	}
 
 	/**
@@ -44,17 +91,19 @@ class Http
 	 */
 	public function stream_close()
 	{
-		if ( \is_resource($this->resource) )
+		if ( !\is_resource($this->resource) )
 		{
-			\fclose( $this->resource );
+			return;
+		}
 
-			if ( !empty($this->content) )
-			{
-				$saveFile = $this->getSaveFile( $this->url[ 'host' ] );
-				\file_put_contents( $saveFile, $this->content );
-				// Reset so we do not overwrite unintentionally for the next request.
-				self::clearSaveFile();
-			}
+		\fclose( $this->resource );
+
+		if ( !empty($this->content) )
+		{
+			$saveFile = $this->getSaveFile( $this->url[ 'host' ] );
+			\file_put_contents( $saveFile, $this->content );
+			// Reset so we do not overwrite unintentionally for the next request.
+			self::clearSaveFile();
 		}
 	}
 
@@ -64,19 +113,6 @@ class Http
 	public function stream_eof()
 	{
 		return \feof( $this->resource );
-	}
-
-	/**
-	 * TODO: Implement.
-	 *
-	 * @param string $path
-	 * @param int $option
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function stream_metadata( $path, $option, $value )
-	{
-		return NULL;
 	}
 
 	/**
@@ -98,7 +134,7 @@ class Http
 		}
 
 		// TODO: Find out what needs to happen when the path is already open.
-
+		$this->areHeadersSet = FALSE;
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile( $this->url[ 'host' ] );
@@ -115,6 +151,7 @@ class Http
 			if ( $this->resource === FALSE )
 			{
 				\trigger_error( 'Unable to connect to ' . $this->url['host'] . "\nReason: " . $errorStr );
+				return FALSE;
 			}
 			$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
 			$headers = \sprintf( "GET %s HTTP/1.0\r\nHost: %s\r\n\r\n", $page, $this->url['host'] );
@@ -136,7 +173,9 @@ class Http
 	{
 		// Get the content
 		$content = \fread( $this->resource, $count );
+		$this->position += strlen( $content );
 		$this->content .= $content;
+		$this->populateResponseHeaders( $content );
 		return $content;
 	}
 
@@ -149,6 +188,23 @@ class Http
 	{
 		$data = [];
 		return $data;
+	}
+
+	/**
+	 * Parse the content for the headers.
+	 */
+	private function populateResponseHeaders()
+	{
+		if ( $this->areHeadersSet )
+		{
+			return;
+		}
+		$headersStr = \strstr( $this->content, "\r\n\r\n", TRUE );
+		if ( !empty($headersStr) > 0 )
+		{
+			$this->wrapperData = \explode( "\r\n", $headersStr );
+			$this->areHeadersSet = TRUE;
+		}
 	}
 
 	/**

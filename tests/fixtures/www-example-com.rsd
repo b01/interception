@@ -2,9 +2,9 @@ HTTP/1.0 200 OK
 Accept-Ranges: bytes
 Cache-Control: max-age=604800
 Content-Type: text/html
-Date: Sun, 19 Oct 2014 13:43:02 GMT
+Date: Wed, 22 Oct 2014 22:40:38 GMT
 Etag: "359670651"
-Expires: Sun, 26 Oct 2014 13:43:02 GMT
+Expires: Wed, 29 Oct 2014 22:40:38 GMT
 Last-Modified: Fri, 09 Aug 2013 23:54:35 GMT
 Server: ECS (ewr/1584)
 X-Cache: HIT
@@ -26,7 +26,7 @@ Connection: close
         margin: 0;
         padding: 0;
         font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
+        
     }
     div {
         width: 600px;
@@ -50,7 +50,7 @@ Connection: close
             padding: 1em;
         }
     }
-    </style>
+    </style>    
 </head>
 
 <body>

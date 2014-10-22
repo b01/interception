@@ -49,10 +49,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_setSaveFile()
 	{
-		$fileName = 'ignore-example-' . date('mdYhi');
-		Http::setSaveFilename( $fileName );
+		$filename = 'ignore-example-' . date('mdYhi');
+		Http::setSaveFilename( $filename );
 		\file_get_contents( 'http://www.example.com' );
-		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
+		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd';
 		$this->assertTrue( \file_exists($file) );
 		\unlink( $file );
 	}
@@ -69,7 +69,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @uses \Kshabazz\Interception\StreamWrappers\Http::setSaveDir()
+	 * @covers \Kshabazz\Interception\StreamWrappers\Http::setSaveDir()
+	 * @uses \Kshabazz\Interception\StreamWrappers\Http::getSaveDir()
 	 */
 	public function test_setSaveDir_with_invalid_dir()
 	{
@@ -79,17 +80,23 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * This makes a real network call to example.com.
+	 * This makes a real network request to example.com.
+	 *
 	 * @expectedException \PHPUnit_Framework_Error
 	 * @expectedExceptionMessage Unable to connect to test.example.com
 	 */
 	public function test_http_live_stream_trigger_error()
 	{
-		Http::setSaveFilename( 'ignore-live-stream-not-found' );
-		$handle = \fopen( 'http://test.example.com/', 'r' );
-		$content = \fread( $handle, 100 );
+		\fopen( 'http://test.example.com/', 'r' );
+	}
+
+	public function test_meta_data()
+	{
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		\fread( $handle, 4096 );
+		$metaData = \stream_get_meta_data( $handle );
 		\fclose( $handle );
-		$this->assertContains( 'HTTP/1.0 200 OK', $content );
+		$this->assertContains( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
 	}
 }
 ?>
