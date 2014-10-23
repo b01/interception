@@ -288,7 +288,7 @@ class Http implements \ArrayAccess
 	/**
 	 * Clear the save file name.
 	 */
-	static private function clearSaveFile()
+	static public function clearSaveFile()
 	{
 		self::$saveFile = '';
 	}

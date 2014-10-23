@@ -49,12 +49,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_setSaveFile()
 	{
-		$filename = 'ignore-example-' . date('mdYhi');
-		Http::setSaveFilename( $filename );
-		\file_get_contents( 'http://www.example.com' );
-		$file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd';
-		$this->assertTrue( \file_exists($file) );
-		\unlink( $file );
+		$filename = 'test-save-filename-';
+		$nameChanged = Http::setSaveFilename($filename);
+		// Clear the save file name so that it is not used for the next request.
+		Http::clearSaveFile();
+		$this->assertTrue( $nameChanged );
 	}
 
 	/**
@@ -97,6 +96,29 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		$metaData = \stream_get_meta_data( $handle );
 		\fclose( $handle );
 		$this->assertContains( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
+	}
+
+	public function test_meta_data_key_exists()
+	{
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		\fread( $handle, 4096 );
+		$metaData = \stream_get_meta_data( $handle );
+		\fclose( $handle );
+		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
+	}
+
+	public function test_setSaveDir()
+	{
+		$this->assertTrue( Http::setSaveDir(FIXTURES_PATH) );
+	}
+
+	/**
+	 * This makes a real network request to example.com.
+	 */
+	public function test_saving_file_when_no_can_be_found()
+	{
+		$this->markTestIncomplete( 'Make sure that no file is created.' );
+		\file_get_contents( 'http://test.example.com/', 'r' );
 	}
 }
 ?>
