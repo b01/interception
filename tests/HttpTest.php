@@ -113,12 +113,18 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * This makes a real network request to example.com.
+	 * This makes a real network request to test.example.com,
+	 * which should be a server not found error.
 	 */
 	public function test_saving_file_when_no_can_be_found()
 	{
-		$this->markTestIncomplete( 'Make sure that no file is created.' );
-		\file_get_contents( 'http://test.example.com/', 'r' );
+		$filename = 'server-not-found';
+		Http::setSaveFilename( $filename );
+		@\file_get_contents( 'http://test.example.com/', 'r' );
+		$fileExists = \file_exists(
+			FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd'
+		);
+		$this->assertFalse( $fileExists, 'A rsd file was saved for a non-existing server.' );
 	}
 }
 ?>
