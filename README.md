@@ -35,11 +35,17 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Make sure we restore the original HTTP stream wrapper for the test environment.
+     */
     static public function tearDownAfterClass()
     {
         stream_wrapper_restore( 'http' );
     }
 
+    /**
+     * Example 1 test case.
+     */
     public function test_http_interception_of_file_get_contents()
     {
         // will generate a file the file:  ./fixtures/example-com.rsd
@@ -47,6 +53,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertContains( 'HTTP/1.0 200 OK', $content );
     }
 
+    /**
+     * Example 2 test case.
+     */
     public function test_setSaveFile()
     {
         // You can also specify the filename for the local cache.
