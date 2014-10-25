@@ -10,6 +10,13 @@ stream wrapper is unregistered.
 2 rsd - stand for "raw socket data" file. No encoding is done.
 
 
+## How it works
+
+The built-in wrapper for protocols like HTTP are replace with the Interception\Http wrapper. So when you call global
+PHP functions \fopen or \fsockopen to make a request, the interception wrapper will make then request and save it to a
+file, then play that same response back for each request to that exact URL.
+
+
 ## Examples
 
 ### How to save HTTP request for playback during unit test.
