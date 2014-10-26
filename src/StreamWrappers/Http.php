@@ -10,9 +10,16 @@
  */
 class Http implements \ArrayAccess
 {
+	const
+		/** @var int */
+		RESOURCE_TYPE_FILE = 1,
+		/** @var int */
+		RESOURCE_TYPE_STREAM = 21;
+
 	public
 		/** @var resource */
 		$context,
+		/** @var int cursor position in the stream. */
 		$position;
 
 	public static
@@ -25,9 +32,11 @@ class Http implements \ArrayAccess
 		/** @var string */
 		$content,
 		/** @var bool */
-		$areHeadersSet,
+		$isHeadersSet,
 		/** @var resource */
 		$resource,
+		/** @var int */
+		$resourceType,
 		/** @var string */
 		$url,
 		/** @var array */
@@ -38,9 +47,10 @@ class Http implements \ArrayAccess
 	 */
 	public function __construct()
 	{
-		$this->content = NULL;
+		$this->content = '';
 		$this->position = 0;
 		$this->resource = NULL;
+		$this->resourceType = NULL;
 		$this->url = NULL;
 		$this->wrapperData = [];
 	}
@@ -100,7 +110,7 @@ class Http implements \ArrayAccess
 
 		if ( !empty($this->content) )
 		{
-			$saveFile = $this->getSaveFile( $this->url[ 'host' ] );
+			$saveFile = $this->getSaveFile( $this->url['host'] );
 			\file_put_contents( $saveFile, $this->content );
 			// Reset so we do not overwrite unintentionally for the next request.
 			self::clearSaveFile();
@@ -129,35 +139,44 @@ class Http implements \ArrayAccess
 	{
 		if( 'r' !== $pMode && 'rb' !== $pMode )
 		{
-			\trigger_error( 'Only read mode is supported.' );
+			\trigger_error(
+				'fopen(' . $pPath . '): failed to open stream: HTTP wrapper does not support writeable connections'
+			);
 			return FALSE;
 		}
 
 		// TODO: Find out what needs to happen when the path is already open.
-		$this->areHeadersSet = FALSE;
+		$this->isHeadersSet = FALSE;
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile( $this->url[ 'host' ] );
 		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
+			$this->resourceType = self::RESOURCE_TYPE_FILE;
 			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
+			$this->resourceType = self::RESOURCE_TYPE_STREAM;
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
 			$this->resource = @\fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
 			// Alert the developer when there is an error connecting.
 			if ( $this->resource === FALSE )
 			{
-				\trigger_error( 'Unable to connect to ' . $this->url['host'] . "\nReason: " . $errorStr );
+				// Original built-in HTTP wrapper error:
+				//  'fopen(): php_network_getaddresses: getaddrinfo failed: No such host is known.
+				\trigger_error( 'fsockopen(' . $remoteSocket. '): ' . $errorStr );
 				return FALSE;
 			}
 			$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
+			// TODO: Allow developer to set headers.
 			$headers = \sprintf( "GET %s HTTP/1.0\r\nHost: %s\r\n\r\n", $page, $this->url['host'] );
 			// Setup the context so we can read from the socket.
 			\fwrite( $this->resource, $headers );
 		}
+
+		$this->populateResponseHeaders();
 
 		// Indicate that we have successfully opened the path.
 		$pOpenedPath = $pPath;
@@ -175,7 +194,6 @@ class Http implements \ArrayAccess
 		$content = \fread( $this->resource, $count );
 		$this->position += strlen( $content );
 		$this->content .= $content;
-		$this->populateResponseHeaders( $content );
 		return $content;
 	}
 
@@ -195,15 +213,22 @@ class Http implements \ArrayAccess
 	 */
 	private function populateResponseHeaders()
 	{
-		if ( $this->areHeadersSet )
+		if ( $this->isHeadersSet )
 		{
 			return;
 		}
-		$headersStr = \strstr( $this->content, "\r\n\r\n", TRUE );
-		if ( !empty($headersStr) > 0 )
+		while ( !\feof($this->resource) )
 		{
-			$this->wrapperData = \explode( "\r\n", $headersStr );
-			$this->areHeadersSet = TRUE;
+			$line = \fgets( $this->resource );
+			$this->content .= $line;
+			$this->position += strlen( $line );
+			$line = trim( $line );
+			// When you reach the end of the header, then exit the loop.
+			if ( empty($line) )
+			{
+				break;
+			}
+			$this->wrapperData[] = $line;
 		}
 	}
 

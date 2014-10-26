@@ -26,12 +26,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		$handle = \fopen( 'http://www.example.com', 'r' );
 		$content = \fread( $handle, 100 );
 		\fclose( $handle );
-		$this->assertContains( 'HTTP/1.0 200 OK', $content );
+		$this->assertContains( '<title>Example Domain</title>', $content );
 	}
 
 	/**
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage Only read mode is supported
+	 * @expectedExceptionMessage fopen(http://www.example.com): failed to open stream: HTTP wrapper does not support writeable connections
 	 */
 	public function test_http_interception_of_fopen_invalid_mode()
 	{
@@ -41,7 +41,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	public function test_http_interception_of_file_get_contents()
 	{
 		$content = \file_get_contents( 'http://www.example.com' );
-		$this->assertContains( 'HTTP/1.0 200 OK', $content );
+		$this->assertContains( '<title>Example Domain</title>', $content );
 	}
 
 	/**
@@ -82,7 +82,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 * This makes a real network request to example.com.
 	 *
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage Unable to connect to test.example.com
+	 * @expectedExceptionMessage fsockopen(tcp://test.example.com): php_network_getaddresses: getaddrinfo failed: No such host is known.
 	 */
 	public function test_http_live_stream_trigger_error()
 	{
@@ -125,6 +125,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 			FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd'
 		);
 		$this->assertFalse( $fileExists, 'A rsd file was saved for a non-existing server.' );
+	}
+
+
+	public function test_get_response_headers_without_reading_from_the_stream()
+	{
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		$metaData = \stream_get_meta_data( $handle );
+		\fclose( $handle );
+		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
 	}
 }
 ?>
