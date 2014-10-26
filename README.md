@@ -13,19 +13,19 @@ stream wrapper is unregistered.
 ## How it works
 
 The built-in wrapper for protocols like HTTP are first unregistered, then replaced with the StreamWrappers\Http wrapper.
-When an HTTP request is made using stream PHP functions\fopen or \fsockopen, the interception wrapper will make then
+When an HTTP request is made using stream PHP functions \fopen or \file_get_contents, the interception wrapper will then
 make a TCP connection and return that as a resource for those functions.
 
 Only content read using the returned TCP resource will be saved to a file when \fclose is called. If at a later time,
 another request is made to that same URL, a file resource to the saved request is initialized and returned for those
-functions. What ever content that was retrieved from the previous TCP connection will be served for any following
+functions. What ever content that was retrieved from the previous TCP connection will be served up for any following
 request; to that exact URL.
 
-In cases where this is the first call to a URL, using \fopen, and \foef did not return TRUE; then only partical content
-will be saved. At minimum the HEADERS for the request will be saved.
+In cases where this is the first call to a URL, using \fopen, but \foef did not return TRUE; then only partial content
+will be saved. At minimum the HEADER for the request will be saved.
 
-If two or more request to the same URL is made using \fopen or fsockopen, before any are closed. They will all have
-independent TCP resources. They will each save a file on \fclose, with the later overwriting the previous.
+If two or more request to the same URL are made using \fopen or \file_get_contents, and before any are closed; They will
+all have independent TCP resources. They will each save a file on \fclose, with the later overwriting the previous save.
 
 
 ## Examples
