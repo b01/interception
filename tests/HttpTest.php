@@ -19,7 +19,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	static public function tearDownAfterClass()
 	{
 		\stream_wrapper_restore( 'http' );
-		// TODO: clean up all ignore files.
+		// Clean up all ignore files.
+		$removeFiles = \glob( FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore*' );
+		\array_map( 'unlink',$removeFiles );
 	}
 
 	public function test_http_interception_of_fopen_using_tcp()
