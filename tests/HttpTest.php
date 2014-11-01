@@ -49,7 +49,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage fopen(http://www.example.com): failed to open stream: HTTP wrapper does not support writeable connections
+	 * @expectedExceptionMessage fopen(http://www.example.com): failed to open stream: HTTP wrapper does not support writable connections
 	 */
 	public function test_http_interception_of_fopen_invalid_mode()
 	{
@@ -176,6 +176,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 		\fclose( $handle );
 		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
+	}
+
+	/**
+	 * @expectedException \Kshabazz\Interception\InterceptionException
+	 * @expectedExceptionMessage Please set a filename
+	 */
+	public function test_throw_exception_when_setSaveFilename_not_call_before_stream_open()
+	{
+		\fopen( 'http://www.example.com/', 'r' );
 	}
 }
 ?>

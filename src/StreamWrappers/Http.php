@@ -3,6 +3,8 @@
  * Intercept HTTP request when \fopen or \file_get_contents is called.
  */
 
+use Kshabazz\Interception\InterceptionException;
+
 /**
  * Class Http
  *
@@ -137,7 +139,7 @@ class Http implements \ArrayAccess
 		if( 'r' !== $pMode && 'rb' !== $pMode )
 		{
 			\trigger_error(
-				'fopen(' . $pPath . '): failed to open stream: HTTP wrapper does not support writeable connections'
+				'fopen(' . $pPath . '): failed to open stream: HTTP wrapper does not support writable connections'
 			);
 			return FALSE;
 		}
@@ -289,6 +291,7 @@ class Http implements \ArrayAccess
 	 * Get the full file path by generating one from the URL, or the one set by the developer.
 	 *
 	 * @return bool
+	 * @throws InterceptionException
 	 */
 	private function getSaveFile()
 	{
@@ -296,7 +299,7 @@ class Http implements \ArrayAccess
 		// When not set by the developer.
 		if ( empty($filename) )
 		{
-			throw new Exception('Please set a filename to save the contents of the request' );
+			throw new InterceptionException( 'Please set a filename to save the contents of the request' );
 		}
 		$ext = '.rsd';
 		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
