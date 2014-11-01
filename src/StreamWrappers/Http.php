@@ -110,7 +110,7 @@ class Http implements \ArrayAccess
 
 		if ( !empty($this->content) )
 		{
-			$saveFile = $this->getSaveFile( $this->url['host'] );
+			$saveFile = $this->getSaveFile();
 			\file_put_contents( $saveFile, $this->content );
 			// Reset so we do not overwrite unintentionally for the next request.
 			self::clearSaveFile();
@@ -130,12 +130,12 @@ class Http implements \ArrayAccess
 	 *
 	 * @param string $pPath
 	 * @param string $pMode
-	 * @param int $pOptions Flags
+	 * @param int $pFlags
 	 * @param string $pOpenedPath
 	 * @return bool
 	 * @throws \Exception
 	 */
-	public function stream_open( $pPath, $pMode, $pOptions, &$pOpenedPath )
+	public function stream_open( $pPath, $pMode, $pFlags, &$pOpenedPath )
 	{
 		if( 'r' !== $pMode && 'rb' !== $pMode )
 		{
@@ -149,7 +149,7 @@ class Http implements \ArrayAccess
 		$this->isHeadersSet = FALSE;
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
-		$localFile = $this->getSaveFile( $this->url[ 'host' ] );
+		$localFile = $this->getSaveFile();
 		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
@@ -295,16 +295,15 @@ class Http implements \ArrayAccess
 	/**
 	 * Get the full file path by generating one from the URL, or the one set by the developer.
 	 *
-	 * @param string $pUrl
 	 * @return bool
 	 */
-	private function getSaveFile( $pUrl )
+	private function getSaveFile()
 	{
 		$filename = self::getSaveFilename();
 		// When not set by the developer.
 		if ( empty($filename) )
 		{
-			$filename = \str_replace( '.', '-', $pUrl );
+			throw new Exception('Please set a filename to save the contents of the request' );
 		}
 		$ext = '.rsd';
 		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;

@@ -2,9 +2,9 @@ HTTP/1.0 200 OK
 Accept-Ranges: bytes
 Cache-Control: max-age=604800
 Content-Type: text/html
-Date: Wed, 22 Oct 2014 22:40:38 GMT
+Date: Sat, 01 Nov 2014 11:01:42 GMT
 Etag: "359670651"
-Expires: Wed, 29 Oct 2014 22:40:38 GMT
+Expires: Sat, 08 Nov 2014 11:01:42 GMT
 Last-Modified: Fri, 09 Aug 2013 23:54:35 GMT
 Server: ECS (ewr/1584)
 X-Cache: HIT

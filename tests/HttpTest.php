@@ -18,11 +18,27 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	static public function tearDownAfterClass()
 	{
-		stream_wrapper_restore( 'http' );
+		\stream_wrapper_restore( 'http' );
+		// TODO: clean up all ignore files.
 	}
 
-	public function test_http_interception_of_fopen()
+	public function test_http_interception_of_fopen_using_tcp()
 	{
+		$filename = 'ignore-www-example-com-fopen';
+		Http::setSaveFilename( $filename );
+		$handle = \fopen( 'http://www.example.com', 'r' );
+		$content = \fread( $handle, 100 );
+		\fclose( $handle );
+		$this->assertContains( '<title>Example Domain</title>', $content );
+		return $filename;
+	}
+
+	/**
+	 * @depends test_http_interception_of_fopen_using_tcp
+	 */
+	public function test_http_interception_of_fopen_using_file( $filename )
+	{
+		Http::setSaveFilename( $filename );
 		$handle = \fopen( 'http://www.example.com', 'r' );
 		$content = \fread( $handle, 100 );
 		\fclose( $handle );
@@ -38,22 +54,23 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\fopen( 'http://www.example.com', 'w' );
 	}
 
-	public function test_http_interception_of_file_get_contents()
+	public function test_http_interception_of_file_get_contents_using_tcp()
 	{
+		$filename = 'ignore-www-example-com-file_get_contents';
+		Http::setSaveFilename( $filename );
 		$content = \file_get_contents( 'http://www.example.com' );
 		$this->assertContains( '<title>Example Domain</title>', $content );
+		return $filename;
 	}
 
 	/**
-	 * @uses \Kshabazz\Interception\StreamWrappers\Http::setSaveFilename()
+	 * @depends test_http_interception_of_file_get_contents_using_tcp
 	 */
-	public function test_setSaveFile()
+	public function test_http_interception_of_file_get_contents_file( $filename )
 	{
-		$filename = 'test-save-filename-';
-		$nameChanged = Http::setSaveFilename($filename);
-		// Clear the save file name so that it is not used for the next request.
-		Http::clearSaveFile();
-		$this->assertTrue( $nameChanged );
+		Http::setSaveFilename( $filename );
+		$content = \file_get_contents( 'http://www.example.com' );
+		$this->assertContains( '<title>Example Domain</title>', $content );
 	}
 
 	/**
@@ -86,11 +103,28 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_http_live_stream_trigger_error()
 	{
+		Http::setSaveFilename( 'www-example-com-3' );
 		\fopen( 'http://test.example.com/', 'r' );
 	}
 
-	public function test_meta_data()
+	public function test_meta_data_from_resource()
 	{
+		$filename = 'ignore-www-example-com-5';
+		Http::setSaveFilename( $filename );
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		\fread( $handle, 4096 );
+		$metaData = \stream_get_meta_data( $handle );
+		\fclose( $handle );
+		$this->assertContains( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
+		return $filename;
+	}
+
+	/**
+	 * @depends test_meta_data_from_resource
+	 */
+	public function test_meta_data_when_using_a_file( $filename )
+	{
+		Http::setSaveFilename( $filename );
 		$handle = \fopen( 'http://www.example.com/', 'r' );
 		\fread( $handle, 4096 );
 		$metaData = \stream_get_meta_data( $handle );
@@ -100,6 +134,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	public function test_meta_data_key_exists()
 	{
+		Http::setSaveFilename( 'www-example-com' );
 		$handle = \fopen( 'http://www.example.com/', 'r' );
 		\fread( $handle, 4096 );
 		$metaData = \stream_get_meta_data( $handle );
@@ -116,7 +151,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 * This makes a real network request to test.example.com,
 	 * which should be a server not found error.
 	 */
-	public function test_saving_file_when_no_can_be_found()
+	public function test_saving_file_when_no_server_can_be_found()
 	{
 		$filename = 'server-not-found';
 		Http::setSaveFilename( $filename );
@@ -127,11 +162,16 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse( $fileExists, 'A rsd file was saved for a non-existing server.' );
 	}
 
-
-	public function test_get_response_headers_without_reading_from_the_stream()
+	public function test_getting_response_headers_without_reading_from_the_stream()
 	{
+		Http::setSaveFilename( 'www-example-com' );
 		$handle = \fopen( 'http://www.example.com/', 'r' );
 		$metaData = \stream_get_meta_data( $handle );
+		// Hidden feature:
+		// Calling Http::setSaveFilename will load the request from that file if it exists.
+		// But you can also call it again, before fclose, to save the content elsewhere.
+		Http::setSaveFilename( 'ignore-www-example-com-partial' );
+
 		\fclose( $handle );
 		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
 	}
