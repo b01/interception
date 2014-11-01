@@ -58,37 +58,61 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     static public function tearDownAfterClass()
     {
-        stream_wrapper_restore( 'http' );
+        \stream_wrapper_restore( 'http' );
     }
 
     /**
-     * Example 1 test case.
-     */
-    public function test_http_interception_of_file_get_contents()
-    {
-        // will generate a file the file:  ./fixtures/example-com.rsd
-        $content = \file_get_contents( 'http://www.example.com' );
-        $this->assertContains( 'HTTP/1.0 200 OK', $content );
-    }
-
-    /**
-     * Example 2 test case.
+     * Example test case.
      */
     public function test_setSaveFile()
     {
         // You can also specify the filename for the local cache.
         Http::setSaveFilename( 'test-example' );
 
-        // Will generate a file the file:  ./fixtures/test-example.rsd
+        // Will generate a file:  ./fixtures/test-example.rsd
         \file_get_contents( 'http://www.example.com' );
 
         $file = FIXTURES_PATH . DIRECTORY_SEPARATOR . $fileName . '.rsd';
         $this->assertTrue( \file_exists($file) );
-        unlink( $file );
+        \unlink( $file );
     }
 }
 ```
 
+### How to use the Interception test listener with PHPUnit
+
+You can Simplify your life by using the InterceptionListener with the @interception annotation. This works as a
+replacement for the code above. Instead using the manual way; you can write a unit test as follows:
+
+```xml
+<!-- in your phpunit.xml add the listener like so: -->
+    <listeners>
+        <listener class="\Kshabazz\Interception\InterceptionListener">
+            <arguments>
+                <string>Http</string>
+                <string>./fixtures</string>
+            </arguments>
+        </listener>
+    </listeners>
+```
+
+```php
+// Then in you unit test:
+    /**
+     * Setup and tear down will happen in the InterceptionListener class.
+     *
+     * @interception ignore-annotation-test
+     */
+    public function test_interception_annotation()
+    {
+        $handle = \fopen( 'http://www.example.com/', 'r' );
+        \fclose( $handle );
+        $filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore-annotation-test.rsd';
+        $this->assertTrue( \file_exists($filename) );
+    }
+```
+
+It will automatically register/unregister the Interception Http stream wrapper class for the test suite.
 
 ## Run Unit Test
 
