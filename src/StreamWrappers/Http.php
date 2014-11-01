@@ -35,8 +35,6 @@ class Http implements \ArrayAccess
 		$isHeadersSet,
 		/** @var resource */
 		$resource,
-		/** @var int */
-		$resourceType,
 		/** @var string */
 		$url,
 		/** @var array */
@@ -50,7 +48,6 @@ class Http implements \ArrayAccess
 		$this->content = '';
 		$this->position = 0;
 		$this->resource = NULL;
-		$this->resourceType = NULL;
 		$this->url = NULL;
 		$this->wrapperData = [];
 	}
@@ -153,19 +150,15 @@ class Http implements \ArrayAccess
 		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
-			$this->resourceType = self::RESOURCE_TYPE_FILE;
 			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
-			$this->resourceType = self::RESOURCE_TYPE_STREAM;
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
 			$this->resource = @\fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
 			// Alert the developer when there is an error connecting.
 			if ( $this->resource === FALSE )
 			{
-				// Original built-in HTTP wrapper error:
-				//  'fopen(): php_network_getaddresses: getaddrinfo failed: No such host is known.
 				\trigger_error( 'fsockopen(' . $remoteSocket. '): ' . $errorStr );
 				return FALSE;
 			}
