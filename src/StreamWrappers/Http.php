@@ -144,7 +144,8 @@ class Http implements \ArrayAccess
 			return FALSE;
 		}
 
-		// TODO: Find out what needs to happen when the path is already open.
+		// TODO: Find out what needs to happen when the path is already open. I may have misunderstood here.
+
 		$this->isHeadersSet = FALSE;
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
@@ -157,18 +158,21 @@ class Http implements \ArrayAccess
 		else
 		{
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
-			$this->resource = @\fsockopen( $remoteSocket, 80, $errorNo, $errorStr );
+			$port = 80;
+			if ( \array_key_exists('port', $this->url) )
+			{
+				$port = ( int ) $this->url[ 'port' ];
+			}
+			$this->resource = @\fsockopen( $remoteSocket, $port, $errorNo, $errorStr );
 			// Alert the developer when there is an error connecting.
 			if ( $this->resource === FALSE )
 			{
 				\trigger_error( 'fsockopen(' . $remoteSocket. '): ' . $errorStr );
 				return FALSE;
 			}
-			$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
-			// TODO: Allow developer to set headers.
-			$headers = \sprintf( "GET %s HTTP/1.0\r\nHost: %s\r\n\r\n", $page, $this->url['host'] );
-			// Setup the context so we can read from the socket.
-			\fwrite( $this->resource, $headers );
+			$request = $this->buildRequest();
+			// Send the request.
+			\fwrite( $this->resource, $request );
 		}
 
 		$this->populateResponseHeaders();
