@@ -191,7 +191,7 @@ class Http implements \ArrayAccess
 	{
 		// Get the content
 		$content = \fread( $this->resource, $count );
-		$this->position += strlen( $content );
+		$this->position += \strlen( $content );
 		$this->content .= $content;
 		return $content;
 	}
@@ -220,8 +220,8 @@ class Http implements \ArrayAccess
 		{
 			$line = \fgets( $this->resource );
 			$this->content .= $line;
-			$this->position += strlen( $line );
-			$line = trim( $line );
+			$this->position += \strlen( $line );
+			$line = \trim( $line );
 			// When you reach the end of the header, then exit the loop.
 			if ( empty($line) )
 			{
@@ -291,6 +291,57 @@ class Http implements \ArrayAccess
 		return TRUE;
 	}
 
+	/**
+	 * Build the request according to: http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
+	 */
+	private function buildRequest()
+	{
+		// template example:
+		// -----------------
+		// {METHOD} {URI} HTTP-{1.0|1.1}CRLF
+		// {headers}CRLF
+        // CRLF
+        // {message-body}
+		$method = 'GET';
+		$httpVersion = '1.0';
+		$headers = '';
+		$body = '';
+		$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
+
+		$options = \stream_context_get_options( $this->context );
+		$httpOptions = [];
+		if ( \array_key_exists('http', $options) )
+		{
+			$httpOptions = $options[ 'http' ];
+		}
+		// Get method verb.
+		if ( \array_key_exists('method', $httpOptions) )
+		{
+			$method = $httpOptions[ 'method' ];
+		}
+		// Get content body.
+		if ( \array_key_exists('content', $httpOptions) )
+		{
+			$body = $httpOptions[ 'content' ];
+		}
+		// Get headers.
+		if ( \array_key_exists('header', $httpOptions) )
+		{
+			$headers = $httpOptions[ 'header' ];
+		}
+		// Build the request as a string.
+		$request = \sprintf(
+			"%s %s HTTP/%s\r\nHost: %s\r\n%s\r\n%s",
+			$method,
+			$page,
+			$httpVersion,
+			$this->url[ 'host' ],
+			$headers,
+			$body
+		);
+
+		return $request;
+	}
 	/**
 	 * Get the full file path by generating one from the URL, or the one set by the developer.
 	 *

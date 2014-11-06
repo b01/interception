@@ -186,5 +186,27 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		\fopen( 'http://www.example.com/', 'r' );
 	}
+
+	public function test_setting_request_headers()
+	{
+		// The test works but you have to manually start the PHP web server before you run it.
+		$this->markTestIncomplete( 'Figure out how to start up the PHP built-in server without it tying up the process.' );
+		$params = 'test=1234';
+		Http::setSaveFilename( 'ignore-headers-set' );
+		$context = \stream_context_create([
+			'http' => [
+				'method' => 'POST',
+		        'header' => \implode("\r\n", [
+			        'content-type: application/x-www-form-urlencoded',
+			        'content-length: ' . strlen( $params ),
+			        'TEST: 4321',
+		        ]) . "\r\n",
+		        'content' => 'test=1234'
+			]
+		]);
+		$connection = \fopen( 'http://localhost:9876/test.php', 'r', FALSE, $context );
+		$content = \fread( $connection, 8000 );
+		$this->assertContains( '1234', $content );
+	}
 }
 ?>
