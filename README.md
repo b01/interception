@@ -86,30 +86,30 @@ replacement for the code above. Instead using the manual way; you can write a un
 
 ```xml
 <!-- in your phpunit.xml add the listener like so: -->
-    <listeners>
-        <listener class="\Kshabazz\Interception\InterceptionListener">
-            <arguments>
-                <string>Http</string>
-                <string>./fixtures</string>
-            </arguments>
-        </listener>
-    </listeners>
+<listeners>
+    <listener class="\Kshabazz\Interception\InterceptionListener">
+        <arguments>
+            <string>Http</string>
+            <string>./fixtures</string>
+        </arguments>
+    </listener>
+</listeners>
 ```
 
 ```php
 // Then in you unit test:
-    /**
-     * Setup and tear down will happen in the InterceptionListener class.
-     *
-     * @interception ignore-annotation-test
-     */
-    public function test_interception_annotation()
-    {
-        $handle = \fopen( 'http://www.example.com/', 'r' );
-        \fclose( $handle );
-        $filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore-annotation-test.rsd';
-        $this->assertTrue( \file_exists($filename) );
-    }
+/**
+ * Setup and tear down will happen in the InterceptionListener class.
+ *
+ * @interception ignore-annotation-test
+ */
+public function test_interception_annotation()
+{
+    $handle = \fopen( 'http://www.example.com/', 'r' );
+    \fclose( $handle );
+    $filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore-annotation-test.rsd';
+    $this->assertTrue( \file_exists($filename) );
+}
 ```
 
 It will automatically register/unregister the Interception Http stream wrapper class for the test suite.
