@@ -10,6 +10,12 @@ stream wrapper is unregistered.
 2 rsd - stand for "raw socket data" file. No encoding is done.
 
 
+## Requirements
+
+* PHP 5.6
+* PHP Streams
+
+
 ## How it works
 
 The built-in wrapper for protocols like HTTP are first unregistered, then replaced with the StreamWrappers\Http wrapper.
