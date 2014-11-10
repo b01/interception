@@ -15,6 +15,9 @@ stream wrapper is unregistered.
 * PHP 5.6
 * PHP Streams
 
+## Roadmap
+
+* Implement HTTPS wrapper.
 
 ## How it works
 
