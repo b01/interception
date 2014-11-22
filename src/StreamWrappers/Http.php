@@ -158,19 +158,46 @@ class Http implements \ArrayAccess
 		else
 		{
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
+			$timeout = ini_get( 'default_socket_timeout' );
 			$port = 80;
+			// When port is specified, use that.
 			if ( \array_key_exists('port', $this->url) )
 			{
 				$port = ( int ) $this->url[ 'port' ];
 			}
-			$this->resource = @\fsockopen( $remoteSocket, $port, $errorNo, $errorStr );
+
+			// When context options are set, use them.
+			$options = \stream_context_get_options( $this->context );
+			$httpOptions = NULL;
+			if ( \array_key_exists('http', $options) )
+			{
+				$httpOptions = $options['http'];
+				$timeout = array_key_exists('timeout', $httpOptions) ? $httpOptions['timeout'] : $timeout;
+			}
+
+			// Open a socket connection to the server.
+			$this->resource = @\fsockopen( $remoteSocket, $port, $errorNo, $errorStr, $timeout );
+
 			// Alert the developer when there is an error connecting.
-			if ( $this->resource === FALSE )
+			if ( !is_resource($this->resource) )
 			{
 				\trigger_error( 'fsockopen(' . $remoteSocket. '): ' . $errorStr );
 				return FALSE;
 			}
-			$request = $this->buildRequest();
+			// Alert developer of connection error.
+			if ($errorNo !== 0 || !empty($errorStr)) {
+				\trigger_error( 'error (' . $errorNo . '):' . $errorStr . PHP_EOL );
+			}
+
+			// Set timeout.
+			\stream_set_timeout($this->resource, $timeout);
+
+			// TODO: figure out when to set blocking mode.
+			if ( $pFlags !== 0 ) {
+				// TODO: Handle flags.
+			}
+
+			$request = $this->buildRequest( $httpOptions );
 			// Send the request.
 			\fwrite( $this->resource, $request );
 		}
@@ -329,13 +356,22 @@ class Http implements \ArrayAccess
 		{
 			$headers = $httpOptions[ 'header' ];
 		}
+		// Get protocol version.
+		if ( \array_key_exists('protocol_version', $httpOptions) )
+		{
+			$httpVersion = $httpOptions[ 'protocol_version' ];
+		}
+		// When host header was not set using context for \fopen/\file_get_contents functions,
+		// you must manually add the Host: header.
+		if (\strpos(strtolower($headers), 'host:') === FALSE) {
+			$headers = "host: {$this->url['host']}" . $headers;
+		}
 		// Build the request as a string.
 		$request = \sprintf(
-			"%s %s HTTP/%s\r\nHost: %s\r\n%s\r\n%s",
+			"%s %s HTTP/%s\r\n%s\r\n\r\n%s",
 			$method,
 			$page,
 			$httpVersion,
-			$this->url[ 'host' ],
 			$headers,
 			$body
 		);

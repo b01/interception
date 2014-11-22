@@ -42,7 +42,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 
 	/**
 	 * Restore PHP built-in HTTP stream wrapper and perform any other clean-up.
-	 * 
+	 *
 	 * @param \PHPUnit_Framework_TestSuite $suite
 	 * @return bool
 	 */
@@ -71,10 +71,11 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 */
 	public function startTestSuite( \PHPUnit_Framework_TestSuite $suite )
 	{
-		\stream_wrapper_unregister( 'http' );
+		$wrapperName = strtolower( $this->wrapperClass );
+		\stream_wrapper_unregister( $wrapperName );
 		\stream_register_wrapper(
-			'http',
-			'\\Kshabazz\\Interception\\StreamWrappers\\Http',
+			$wrapperName,
+			'\\Kshabazz\\Interception\\StreamWrappers\\' . $this->wrapperClass,
 			\STREAM_IS_URL
 		);
 		Http::setSaveDir( $this->savePath );
