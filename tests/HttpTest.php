@@ -19,9 +19,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	static public function tearDownAfterClass()
 	{
 		\stream_wrapper_restore( 'http' );
+		// TODO: Move this where it will execute after the entire suite runs.
 		// Clean up all ignore files.
 		$removeFiles = \glob( FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore*' );
-		\array_map( 'unlink',$removeFiles );
+		\array_map( 'unlink', $removeFiles );
 	}
 
 	public function test_http_interception_of_fopen_using_tcp()
@@ -36,6 +37,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * By using the same filename from the previous test, we can check that Interception loads request from file.
+	 *
 	 * @depends test_http_interception_of_fopen_using_tcp
 	 */
 	public function test_http_interception_of_fopen_using_file( $filename )
@@ -121,27 +124,31 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		return $filename;
 	}
 
+	public function test_stream_get_meta_data_when_using_a_socket()
+	{
+		$filename = 'ignore-www-example-com-via-socket';
+		Http::setSaveFilename( $filename );
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		\fread( $handle, 4096 );
+		$metaData = \stream_get_meta_data( $handle );
+		\fclose( $handle );
+		// Headers are stored at index 0 of the wrapper data.
+		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
+		$this->assertEquals( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
+		return $filename;
+	}
+
 	/**
-	 * @depends test_meta_data_from_resource
+	 * @depends test_stream_get_meta_data_when_using_a_socket
 	 */
-	public function test_meta_data_when_using_a_file( $filename )
+	public function test_stream_get_meta_data_when_using_a_file( $filename )
 	{
 		Http::setSaveFilename( $filename );
 		$handle = \fopen( 'http://www.example.com/', 'r' );
 		\fread( $handle, 4096 );
 		$metaData = \stream_get_meta_data( $handle );
 		\fclose( $handle );
-		$this->assertContains( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
-	}
-
-	public function test_meta_data_key_exists()
-	{
-		Http::setSaveFilename( 'www-example-com' );
-		$handle = \fopen( 'http://www.example.com/', 'r' );
-		\fread( $handle, 4096 );
-		$metaData = \stream_get_meta_data( $handle );
-		\fclose( $handle );
-		$this->assertArrayHasKey( 0, $metaData['wrapper_data'] );
+		$this->assertEquals( 'HTTP/1.0 200 OK', $metaData['wrapper_data'][0] );
 	}
 
 	public function test_setSaveDir()
@@ -182,7 +189,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 * @expectedException \Kshabazz\Interception\InterceptionException
 	 * @expectedExceptionMessage Please set a filename
 	 */
-	public function test_throw_exception_when_setSaveFilename_not_call_before_stream_open()
+	public function test_throw_exception_when_setSaveFilename_not_called_before_stream_open()
 	{
 		\fopen( 'http://www.example.com/', 'r' );
 	}
@@ -190,7 +197,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	public function test_setting_request_headers()
 	{
 		// The test works but you have to manually start the PHP web server before you run it.
-		$this->markTestIncomplete( 'Figure out how to start up the PHP built-in server without it tying up the process.' );
+		$this->markTestIncomplete( 'Build a windows bat script to start/stop the PHP built-in server without it blocking this process.' );
 		$params = 'test=1234';
 		Http::setSaveFilename( 'ignore-headers-set' );
 		$context = \stream_context_create([
@@ -207,6 +214,20 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		$connection = \fopen( 'http://localhost:9876/test.php', 'r', FALSE, $context );
 		$content = \fread( $connection, 8000 );
 		$this->assertContains( '1234', $content );
+	}
+
+	/**
+	 * When there are no headers, we will get stuck in stream_open, due to the while loop in populateResponseHeaders()
+	 */
+	public function test_no_headers_with_stream_get_meta_data()
+	{
+		Http::setSaveFilename( 'no-header' );
+		$handle = \fopen( 'http://www.example.com/', 'r' );
+		\fread( $handle, 4096 );
+		$metaData = \stream_get_meta_data( $handle );
+		\fclose( $handle );
+		// Headers are stored at index 0 of the wrapper data.
+		$this->assertNull( $metaData['wrapper_data'][0] );
 	}
 }
 ?>

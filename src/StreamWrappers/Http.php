@@ -16,7 +16,7 @@ class Http implements \ArrayAccess
 		/** @var int */
 		RESOURCE_TYPE_FILE = 1,
 		/** @var int */
-		RESOURCE_TYPE_STREAM = 21;
+		RESOURCE_TYPE_SOCKET = 2;
 
 	public
 		/** @var resource */
@@ -33,10 +33,10 @@ class Http implements \ArrayAccess
 	private
 		/** @var string */
 		$content,
-		/** @var bool */
-		$isHeadersSet,
 		/** @var resource */
 		$resource,
+		/** @var int */
+		$resourceType,
 		/** @var string */
 		$url,
 		/** @var array */
@@ -50,8 +50,9 @@ class Http implements \ArrayAccess
 		$this->content = '';
 		$this->position = 0;
 		$this->resource = NULL;
+		$this->resourceType = NULL;
 		$this->url = NULL;
-		$this->wrapperData = [];
+		$this->wrapperData = NULL;
 	}
 
 	/**
@@ -105,15 +106,21 @@ class Http implements \ArrayAccess
 			return;
 		}
 
-		\fclose( $this->resource );
-
-		if ( !empty($this->content) )
+		// Close the resource.
+		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
+			\fclose( $this->resource );
+		}
+		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		{
+			\socket_close( $this->resource );
+			// Only save the file when not loaded locally.
 			$saveFile = $this->getSaveFile();
 			\file_put_contents( $saveFile, $this->content );
-			// Reset so we do not overwrite unintentionally for the next request.
-			self::clearSaveFile();
 		}
+
+		// Reset so we do not overwrite a file unintentionally for the next request.
+		self::clearSaveFile();
 	}
 
 	/**
@@ -121,7 +128,19 @@ class Http implements \ArrayAccess
 	 */
 	public function stream_eof()
 	{
-		return \feof( $this->resource );
+		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		{
+			return \feof( $this->resource );
+		}
+		if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		{
+			$bytes = \socket_recv( $this->resource, $buffer, 1, \MSG_PEEK );
+			if ( $bytes === FALSE )
+			{
+				$this->triggerSocketError();
+			}
+			return $bytes === 0;
+		}
 	}
 
 	/**
@@ -146,17 +165,18 @@ class Http implements \ArrayAccess
 
 		// TODO: Find out what needs to happen when the path is already open. I may have misunderstood here.
 
-		$this->isHeadersSet = FALSE;
 		$this->url = \parse_url( $pPath );
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile();
 		// Load from local cache, or from the network.
 		if ( \file_exists($localFile) )
 		{
+			$this->resourceType = self::RESOURCE_TYPE_FILE;
 			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
+			$this->resourceType = self::RESOURCE_TYPE_SOCKET;
 			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
 			$timeout = ini_get( 'default_socket_timeout' );
 			$port = 80;
@@ -188,18 +208,41 @@ class Http implements \ArrayAccess
 			if ($errorNo !== 0 || !empty($errorStr)) {
 				\trigger_error( 'error (' . $errorNo . '):' . $errorStr . PHP_EOL );
 			}
+			// Get socket resource.
+			$this->resource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
+			if ( !is_resource($this->resource) )
+			{
+				\trigger_error( 'Unable to connect to ' . $this->url['host'] );
+				return FALSE;
+			}
 
-			// Set timeout.
-			\stream_set_timeout($this->resource, $timeout);
-
+			// Attempt to connect.
+			$isConnected = \socket_connect( $this->resource, $this->url['host'], $port );
+			if ( !$isConnected )
+			{
+				$this->triggerSocketError();
+			}
 			// TODO: figure out when to set blocking mode.
 			if ( $pFlags !== 0 ) {
 				// TODO: Handle flags.
 			}
 
 			$request = $this->buildRequest( $httpOptions );
+			$lengthToWrite = \strlen($request);
+			$lengthWritten = 0;
 			// Send the request.
-			\fwrite( $this->resource, $request );
+			do
+			{
+				$lengthWritten += \socket_write( $this->resource, $request );
+				if ( $lengthWritten >= $lengthToWrite ) {
+					break;
+				}
+				else
+				{
+					echo( 'still need to write this much to the socket: ' . ($lengthToWrite - $lengthWritten) . "\n" );
+				}
+
+			} while ( $lengthWritten < $lengthToWrite );
 		}
 
 		$this->populateResponseHeaders();
@@ -217,7 +260,8 @@ class Http implements \ArrayAccess
 	public function stream_read( $count )
 	{
 		// Get the content
-		$content = \fread( $this->resource, $count );
+		$content = $this->readFromResource( $count );
+
 		$this->position += \strlen( $content );
 		$this->content .= $content;
 		return $content;
@@ -235,27 +279,11 @@ class Http implements \ArrayAccess
 	}
 
 	/**
-	 * Parse the content for the headers.
+	 * Clear the save file name.
 	 */
-	private function populateResponseHeaders()
+	static public function clearSaveFile()
 	{
-		if ( $this->isHeadersSet )
-		{
-			return;
-		}
-		while ( !\feof($this->resource) )
-		{
-			$line = \fgets( $this->resource );
-			$this->content .= $line;
-			$this->position += \strlen( $line );
-			$line = \trim( $line );
-			// When you reach the end of the header, then exit the loop.
-			if ( empty($line) )
-			{
-				break;
-			}
-			$this->wrapperData[] = $line;
-		}
+		self::$saveFile = '';
 	}
 
 	/**
@@ -327,8 +355,8 @@ class Http implements \ArrayAccess
 		// -----------------
 		// {METHOD} {URI} HTTP-{1.0|1.1}CRLF
 		// {headers}CRLF
-        // CRLF
-        // {message-body}
+		// CRLF
+		// {message-body}
 		$method = 'GET';
 		$httpVersion = '1.0';
 		$headers = '';
@@ -336,6 +364,7 @@ class Http implements \ArrayAccess
 		$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
 
 		$options = \stream_context_get_options( $this->context );
+
 		$httpOptions = [];
 		if ( \array_key_exists('http', $options) )
 		{
@@ -378,6 +407,7 @@ class Http implements \ArrayAccess
 
 		return $request;
 	}
+
 	/**
 	 * Get the full file path by generating one from the URL, or the one set by the developer.
 	 *
@@ -396,12 +426,101 @@ class Http implements \ArrayAccess
 		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
 	}
 
+
 	/**
-	 * Clear the save file name.
+	 * Parse the content for the headers.
 	 */
-	static public function clearSaveFile()
+	private function populateResponseHeaders()
 	{
-		self::$saveFile = '';
+		$done = FALSE;
+		$line = NULL;
+		$header = '';
+		$buffer = NULL;
+
+		// When using a file stream.
+		if ( $this->resourceType === self::RESOURCE_TYPE_FILE ) {
+			$done = \feof( $this->resource );
+		}
+
+		// Read the headers from the resource.
+		while ( !$done )
+		{
+			$buffer = $this->readFromResource(1);
+			// Update stream
+			$this->content .= $buffer;
+			$header = \strstr( $this->content, "\r\n\r\n", TRUE );
+			// When you reach the end of the header, then exit the loop.
+			if ( $buffer === '' || $header !== FALSE )
+			{
+				break;
+			}
+		}
+
+		// Update cursor position.
+		$this->position += \strlen( $this->content );
+		// Parse header.
+		if ( strlen(trim($header)) > 0 )
+		{
+			// Set header
+			$this->wrapperData = explode( "\r\n", $header );
+		}
+	}
+
+	/**
+	 * @param resource $pResource
+	 * @param int $pLength
+	 * @return bool
+	 */
+	private function readFromSocket( $pResource, $pLength = 100 )
+	{
+		$reads = array( $pResource );
+		$writes = NULL;
+		$excepts = NULL;
+		if ( FALSE === ($changedStreams = \socket_select($reads, $writes, $excepts, 1, 2)) )
+		{
+			$this->triggerSocketError();
+		}
+		else if ( $changedStreams > 0 )
+		{
+			$bytes = \socket_recv( $reads[0], $buffer, $pLength, \MSG_WAITALL );
+			if ( $bytes === FALSE )
+			{
+				$this->triggerSocketError();
+			}
+			if ( $bytes === 0 )
+			{
+				return FALSE;
+			}
+			return $buffer;
+		}
+	}
+	/**
+	 * @param int $pCount
+	 * @return bool|string
+	 */
+	private function readFromResource( $pCount = 100 )
+	{
+		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		{
+			$buffer = \fread( $this->resource, $pCount );
+			return $buffer;
+		}
+		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		{
+			$buffer = $this->readFromSocket( $this->resource, $pCount );
+			return $buffer;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Trigger socket error.
+	 */
+	private function triggerSocketError()
+	{
+		$erroNo = socket_last_error( $this->resource );
+		$errorStr = \socket_strerror( $erroNo );
+		trigger_error( '\\Kshabazz\\Interception\\StreamWrappers\\Http' . $errorStr );
 	}
 }
 ?>
