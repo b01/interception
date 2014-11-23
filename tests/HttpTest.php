@@ -52,7 +52,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage fopen(http://www.example.com): failed to open stream: HTTP wrapper does not support writable connections
+	 * @expectedExceptionMessage http://www.example.com: failed to open stream: HTTP wrapper does not support writable connections
 	 */
 	public function test_http_interception_of_fopen_invalid_mode()
 	{
@@ -101,12 +101,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * This makes a real network request to example.com.
+	 * Test error thrown for bad host name.
 	 *
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage fsockopen(tcp://test.example.com): php_network_getaddresses: getaddrinfo failed: No such host is known.
+	 * @expectedExceptionMessage No such host is known.
 	 */
-	public function test_http_live_stream_trigger_error()
+	public function test_http_socket_unknown_host_triggers_an_error()
 	{
 		Http::setSaveFilename( 'www-example-com-3' );
 		\fopen( 'http://test.example.com/', 'r' );
@@ -164,7 +164,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		$filename = 'server-not-found';
 		Http::setSaveFilename( $filename );
-		@\file_get_contents( 'http://test.example.com/', 'r' );
+		@\file_get_contents( 'http://test.example.com/' );
 		$fileExists = \file_exists(
 			FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd'
 		);

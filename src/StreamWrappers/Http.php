@@ -113,6 +113,7 @@ class Http implements \ArrayAccess
 		}
 		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
 		{
+			\socket_shutdown( $this->resource );
 			\socket_close( $this->resource );
 			// Only save the file when not loaded locally.
 			$saveFile = $this->getSaveFile();
@@ -158,7 +159,7 @@ class Http implements \ArrayAccess
 		if( 'r' !== $pMode && 'rb' !== $pMode )
 		{
 			\trigger_error(
-				'fopen(' . $pPath . '): failed to open stream: HTTP wrapper does not support writable connections'
+				 $pPath . ': failed to open stream: HTTP wrapper does not support writable connections'
 			);
 			return FALSE;
 		}
@@ -177,7 +178,6 @@ class Http implements \ArrayAccess
 		else
 		{
 			$this->resourceType = self::RESOURCE_TYPE_SOCKET;
-			$remoteSocket = 'tcp://' . $this->url[ 'host' ];
 			$timeout = ini_get( 'default_socket_timeout' );
 			$port = 80;
 			// When port is specified, use that.
@@ -195,7 +195,7 @@ class Http implements \ArrayAccess
 				$timeout = array_key_exists('timeout', $httpOptions) ? $httpOptions['timeout'] : $timeout;
 			}
 
-			// Get socket resource.
+			// Init socket resource.
 			$this->resource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
 			if ( !is_resource($this->resource) )
 			{
@@ -204,10 +204,11 @@ class Http implements \ArrayAccess
 			}
 
 			// Attempt to connect.
-			$isConnected = \socket_connect( $this->resource, $this->url['host'], $port );
+			$isConnected = @\socket_connect( $this->resource, $this->url['host'], $port );
 			if ( !$isConnected )
 			{
 				$this->triggerSocketError();
+				return FALSE;
 			}
 			// TODO: figure out when to set blocking mode.
 			if ( $pFlags !== 0 ) {
@@ -466,6 +467,7 @@ class Http implements \ArrayAccess
 		if ( FALSE === ($changedStreams = \socket_select($reads, $writes, $excepts, 1, 2)) )
 		{
 			$this->triggerSocketError();
+			return FALSE;
 		}
 		else if ( $changedStreams > 0 )
 		{
@@ -473,6 +475,7 @@ class Http implements \ArrayAccess
 			if ( $bytes === FALSE )
 			{
 				$this->triggerSocketError();
+				return FALSE;
 			}
 			if ( $bytes === 0 )
 			{
@@ -481,6 +484,7 @@ class Http implements \ArrayAccess
 			return $buffer;
 		}
 	}
+
 	/**
 	 * @param int $pCount
 	 * @return bool|string
@@ -507,7 +511,7 @@ class Http implements \ArrayAccess
 	{
 		$erroNo = socket_last_error( $this->resource );
 		$errorStr = \socket_strerror( $erroNo );
-		trigger_error( '\\Kshabazz\\Interception\\StreamWrappers\\Http' . $errorStr );
+		trigger_error( '\\Kshabazz\\Interception\\StreamWrappers\\Http ' . $errorStr );
 	}
 }
 ?>
