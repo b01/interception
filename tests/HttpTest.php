@@ -197,7 +197,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	public function test_setting_request_headers()
 	{
 		// The test works but you have to manually start the PHP web server before you run it.
-		$this->markTestIncomplete( 'Build a windows bat script to start/stop the PHP built-in server without it blocking this process.' );
+		$this->markTestIncomplete( 'Build a windows batch script to start/stop the PHP built-in server without it blocking this process.' );
 		$params = 'test=1234';
 		Http::setSaveFilename( 'ignore-headers-set' );
 		$context = \stream_context_create([
@@ -228,6 +228,36 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\fclose( $handle );
 		// Headers are stored at index 0 of the wrapper data.
 		$this->assertNull( $metaData['wrapper_data'][0] );
+	}
+
+	public function test_http_protocol_1_1()
+	{
+		Http::setSaveFilename( 'ignore-http-protocol-1-1' );
+		$context = \stream_context_create([
+				'http' => [
+					'method' => 'GET',
+					'protocol_version' => '1.1'
+				]
+			]);
+		$connection = \fopen( 'http://www.example.com/', 'r', FALSE, $context );
+		$metaData = \stream_get_meta_data( $connection );
+		$this->assertContains( 'HTTP/1.1 200 OK', $metaData[ 'wrapper_data' ][0] );
+	}
+
+	public function test_http_protocol_1_1_with_connection_close()
+	{
+		Http::setSaveFilename( 'ignore-http-protocol-1-1-close-connection-header' );
+		$context = \stream_context_create([
+				'http' => [
+					'header' => 'Connection: close',
+					'method' => 'GET',
+					'protocol_version' => '1.1'
+				]
+			]);
+		$connection = \fopen( 'http://www.example.com/', 'r', FALSE, $context );
+		$metaData = \stream_get_meta_data( $connection );
+		\fclose( $connection );
+		$this->assertContains( 'HTTP/1.1 200 OK', $metaData['wrapper_data'][0] );
 	}
 }
 ?>

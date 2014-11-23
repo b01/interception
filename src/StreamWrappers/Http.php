@@ -10,7 +10,7 @@ use Kshabazz\Interception\InterceptionException;
  *
  * @package Kshabazz\Interception\StreamWrappers
  */
-class Http implements \ArrayAccess
+class Http implements \ArrayAccess, \Countable
 {
 	const
 		/** @var int */
@@ -56,6 +56,14 @@ class Http implements \ArrayAccess
 	}
 
 	/**
+	 * @inherit
+	 */
+	public function count()
+	{
+		return \count( $this->wrapperData );
+	}
+
+	/**
 	 * Allow access via indices.
 	 *
 	 * @param mixed $pKey
@@ -67,10 +75,7 @@ class Http implements \ArrayAccess
 	}
 
 	/**
-	 * Allow access via indices.
-	 *
-	 * @param mixed $pKey
-	 * @return bool
+	 * @inherit
 	 */
 	public function offsetGet( $pKey )
 	{
@@ -78,9 +83,8 @@ class Http implements \ArrayAccess
 	}
 
 	/**
+	 * @inherit
 	 * @codeCoverageIgnore
-	 * @param mixed $pKey
-	 * @param mixed $pValue
 	 */
 	public function offsetSet( $pKey, $pValue )
 	{
@@ -129,19 +133,25 @@ class Http implements \ArrayAccess
 	 */
 	public function stream_eof()
 	{
+		// Start off assuming the EOF has been reached.
+		$eof = TRUE;
+
+
 		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
-			return \feof( $this->resource );
+			$eof = \feof( $this->resource );
 		}
-		if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
 		{
 			$bytes = \socket_recv( $this->resource, $buffer, 1, \MSG_PEEK );
 			if ( $bytes === FALSE )
 			{
 				$this->triggerSocketError();
 			}
-			return $bytes === 0;
+			$eof = $bytes === 0;
 		}
+
+		return $eof;
 	}
 
 	/**
@@ -262,8 +272,7 @@ class Http implements \ArrayAccess
 	 */
 	public function stream_stat()
 	{
-		$data = [];
-		return $data;
+		return [];
 	}
 
 	/**
@@ -380,8 +389,10 @@ class Http implements \ArrayAccess
 		}
 		// When host header was not set using context for \fopen/\file_get_contents functions,
 		// you must manually add the Host: header.
-		if (\strpos(strtolower($headers), 'host:') === FALSE) {
-			$headers = "host: {$this->url['host']}" . $headers;
+		if ( \strpos(strtolower($headers), 'host:') === FALSE )
+		{
+			$lineBreak = ( \strlen($headers) > 0 ) ? "\r\n" : '';
+			$headers = "host: {$this->url['host']}{$lineBreak}{$headers}";
 		}
 		// Build the request as a string.
 		$request = \sprintf(
@@ -464,25 +475,26 @@ class Http implements \ArrayAccess
 		$reads = array( $pResource );
 		$writes = NULL;
 		$excepts = NULL;
+		$returnValue = FALSE;
 		if ( FALSE === ($changedStreams = \socket_select($reads, $writes, $excepts, 1, 2)) )
 		{
 			$this->triggerSocketError();
-			return FALSE;
 		}
 		else if ( $changedStreams > 0 )
 		{
 			$bytes = \socket_recv( $reads[0], $buffer, $pLength, \MSG_WAITALL );
+			// When an error occurs.
 			if ( $bytes === FALSE )
 			{
 				$this->triggerSocketError();
-				return FALSE;
 			}
-			if ( $bytes === 0 )
+			// When there is more data, then return the data.
+			if ( $bytes > 0 )
 			{
-				return FALSE;
+				$returnValue = $buffer;
 			}
-			return $buffer;
 		}
+		return $returnValue;
 	}
 
 	/**
