@@ -195,19 +195,6 @@ class Http implements \ArrayAccess
 				$timeout = array_key_exists('timeout', $httpOptions) ? $httpOptions['timeout'] : $timeout;
 			}
 
-			// Open a socket connection to the server.
-			$this->resource = @\fsockopen( $remoteSocket, $port, $errorNo, $errorStr, $timeout );
-
-			// Alert the developer when there is an error connecting.
-			if ( !is_resource($this->resource) )
-			{
-				\trigger_error( 'fsockopen(' . $remoteSocket. '): ' . $errorStr );
-				return FALSE;
-			}
-			// Alert developer of connection error.
-			if ($errorNo !== 0 || !empty($errorStr)) {
-				\trigger_error( 'error (' . $errorNo . '):' . $errorStr . PHP_EOL );
-			}
 			// Get socket resource.
 			$this->resource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
 			if ( !is_resource($this->resource) )
