@@ -34,12 +34,15 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
 	public function test_intercepting_ringphp_stream_handle_request()
 	{
-		// Notice: In order to get RingPHP to work, I have to add this to the GuzzleHttp\Ring\Client\StreamHandler::createStreamResource method:
+		// Notice: In order to get RingPHP to work, a path to GuzzleHttp\Ring\Client\StreamHandler::createStreamResource
+		//         method must be applied.
 
 		// Reason: RingPHP uses $http_response_header to retrieve header information for a request.
 		//         Unfortunately I am not aware of any way to set this from a custom HTTP wrapper class.
 		//         Until that is possible, You have to manually patch the RingPHP before running these test.
 		//
+
+		// Patch to apply:
 //		$fopenStream = fopen($url, 'r', null, $context);
 //		if (!is_array($http_response_header)) {
 //			$metaData = stream_get_meta_data($fopenStream);
