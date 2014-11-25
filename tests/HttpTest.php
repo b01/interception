@@ -268,12 +268,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 					'header' => 'Connection: close',
 					'method' => 'GET',
 					'protocol_version' => '1.1'
-				],
-		        'ssl' => [
-			        'verify' => FALSE
-		        ]
+				]
 			]);
-		$connection = \fopen( 'http://www.example.com/', 'r', FALSE, $context );
+		$connection = \fopen( 'https://www.example.com/', 'r', FALSE, $context );
 		$metaData = \stream_get_meta_data( $connection );
 		\fclose( $connection );
 		$this->assertContains( 'HTTP/1.1 200 OK', $metaData['wrapper_data'][0] );
