@@ -7,18 +7,26 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	static public function setUpBeforeClass()
 	{
 		\stream_wrapper_unregister( 'http' );
-		Http::setSaveDir( FIXTURES_PATH );
-
+		\stream_wrapper_unregister( 'https' );
+		// Register HTTP
 		\stream_register_wrapper(
 			'http',
 			'\\Kshabazz\\Interception\\StreamWrappers\\Http',
 			\STREAM_IS_URL
 		);
+		// Register HTTPS
+		\stream_register_wrapper(
+			'https',
+			'\\Kshabazz\\Interception\\StreamWrappers\\Http',
+			\STREAM_IS_URL
+		);
+		Http::setSaveDir( FIXTURES_PATH );
 	}
 
 	static public function tearDownAfterClass()
 	{
 		\stream_wrapper_restore( 'http' );
+		\stream_wrapper_restore( 'https' );
 		// TODO: Move this where it will execute after the entire suite runs.
 		// Clean up all ignore files.
 		$removeFiles = \glob( FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore*' );
