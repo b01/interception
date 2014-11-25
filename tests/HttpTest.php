@@ -259,5 +259,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\fclose( $connection );
 		$this->assertContains( 'HTTP/1.1 200 OK', $metaData['wrapper_data'][0] );
 	}
+
+	public function test_https_protocol_1_1_with_connection_close()
+	{
+		Http::setSaveFilename( 'ignore-https-protocol-1-1-close-connection-header' );
+		$context = \stream_context_create([
+				'http' => [
+					'header' => 'Connection: close',
+					'method' => 'GET',
+					'protocol_version' => '1.1'
+				],
+		        'ssl' => [
+			        'verify' => FALSE
+		        ]
+			]);
+		$connection = \fopen( 'http://www.example.com/', 'r', FALSE, $context );
+		$metaData = \stream_get_meta_data( $connection );
+		\fclose( $connection );
+		$this->assertContains( 'HTTP/1.1 200 OK', $metaData['wrapper_data'][0] );
+	}
 }
 ?>
