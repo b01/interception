@@ -2,14 +2,11 @@
 /**
  * Test for use with Guzzle HTTP client.
  */
-use GuzzleHttp\Client;
-use GuzzleHttp\Ring\Client\StreamHandler;
-use Kshabazz\Interception\StreamWrappers\Http;
-/**
- * Class GuzzleTest
- *
- * @package Kshabazz\Tests\Interception
- */
+
+use \GuzzleHttp\Client,
+	\GuzzleHttp\Ring\Client\StreamHandler,
+	\Kshabazz\Interception\StreamWrappers\Http;
+
 class HttpClientTest extends \PHPUnit_Framework_TestCase
 {
 	static public function setUpBeforeClass()
@@ -55,23 +52,20 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 //		}
 		$filename = 'ignore-ringphp-test';
 		Http::setSaveFilename( $filename );
-		$request = array(
+		$streamHandler = new StreamHandler();
+		// Make the request.
+		$streamHandler(array(
 			'http_method' => 'GET',
 			'scheme' => 'http',
 			'uri' => '/',
-			'version' => '1.0',
 			'headers' => array( 'Host' => array('www.example.com') ),
 			'client' => array(
-				// Turn SSL off so no HTTPS, on by default.
+				// Turn SSL verify off, on by default.
 				'verify' => FALSE,
-				'version' => '1.0'
 			)
-		);
-		// Make the request.
-		$streamHandler = new StreamHandler();
-		$streamHandler( $request );
+		));
 		// Verify the request was recorded.
-		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename .'.rsd' );
+		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd' );
 		$this->assertTrue( $requestIntercepted );
 
 		return $streamHandler;
@@ -85,12 +79,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		$filename = 'ignore-guzzle-test';
 		Http::setSaveFilename( $filename );
 		// Force Guzzle to use a PHP stream instead of cURL.
-		$httpClient = new Client(
-			array(
-				'handler' => $streamHandler
-			)
-		);
-		$response = $httpClient->get(
+		$httpClient = new Client(array(
+			'handler' => $streamHandler
+		));
+
+		$httpClient->get(
 			'http://www.example.com/',
 			array(
 				'version' => '1.0',
@@ -102,3 +95,4 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		$this->assertTrue( $requestIntercepted );
 	}
 }
+?>
