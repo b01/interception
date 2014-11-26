@@ -117,7 +117,14 @@ class Http implements \ArrayAccess, \Countable
 		}
 		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
 		{
-			\socket_shutdown( $this->resource );
+			try
+			{
+				// This could throw errors if the socket is not connected on some systems.
+				\socket_shutdown( $this->resource );
+			}
+			catch ( \Exception $pError )
+			{
+			}
 			\socket_close( $this->resource );
 			// Only save the file when not loaded locally.
 			$saveFile = $this->getSaveFile();
