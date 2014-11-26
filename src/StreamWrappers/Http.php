@@ -28,7 +28,9 @@ class Http implements \ArrayAccess, \Countable
 		/** @var string Directory to save raw files. */
 		$saveDir = '.',
 		/** @var string */
-		$saveFile = '';
+		$saveFile = '',
+		/** @var bool Prevent the save file from being cleared on close. */
+		$saveFilePersist = FALSE;
 
 	private
 		/** @var string */
@@ -125,6 +127,9 @@ class Http implements \ArrayAccess, \Countable
 			\file_put_contents( $saveFile, $this->content );
 		}
 
+		// Leave the resource for garbage clean-up.
+		$this->resource = NULL;
+
 		// Reset so we do not overwrite a file unintentionally for the next request.
 		self::clearSaveFile();
 	}
@@ -136,7 +141,6 @@ class Http implements \ArrayAccess, \Countable
 	{
 		// Start off assuming the EOF has been reached.
 		$eof = TRUE;
-
 
 		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
@@ -260,9 +264,9 @@ class Http implements \ArrayAccess, \Countable
 	{
 		// Get the content
 		$content = $this->readFromResource( $count );
-
 		$this->position += \strlen( $content );
 		$this->content .= $content;
+
 		return $content;
 	}
 
@@ -278,10 +282,19 @@ class Http implements \ArrayAccess, \Countable
 
 	/**
 	 * Clear the save file name.
+	 *
+	 * @return bool
 	 */
 	static public function clearSaveFile()
 	{
-		self::$saveFile = '';
+		// Clear the save file, unless explicitly told not to.
+		if ( self::$saveFilePersist === FALSE )
+		{
+			self::$saveFile = '';
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -302,6 +315,22 @@ class Http implements \ArrayAccess, \Countable
 	static public function getSaveFilename()
 	{
 		return self::$saveFile;
+	}
+
+	/**
+	 * Allow the save file name to persist, until called with FALSE.
+	 *
+	 * @param bool $pPersist
+	 * @return bool Current setting.
+	 */
+	static public function persistSaveFile( $pPersist = FALSE )
+	{
+		if ( \is_bool($pPersist) )
+		{
+			self::$saveFilePersist = $pPersist;
+		}
+
+		return self::$saveFilePersist;
 	}
 
 	/**

@@ -282,5 +282,18 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\fclose( $connection );
 		$this->assertContains( 'HTTP/1.1 200 OK', $metaData['wrapper_data'][0] );
 	}
+
+	public function test_save_file_persist()
+	{
+		$filename = 'www-example-com';
+		Http::setSaveFilename( $filename );
+		Http::persistSaveFile( TRUE );
+		\file_get_contents( 'http://www.example.com/' );
+		\file_get_contents( 'http://www.example.com/' );
+		$actual = Http::getSaveFilename();
+		// Turn this off or we break other tests.
+		Http::persistSaveFile( FALSE );
+		$this->assertContains( $filename, $actual );
+	}
 }
 ?>
