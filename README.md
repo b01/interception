@@ -17,7 +17,7 @@ stream wrapper is unregistered.
 
 ## Roadmap
 
-* Implement HTTPS wrapper.
+* Get to work with RingPHP StreamWrapper.
 
 ## How it works
 
