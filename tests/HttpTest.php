@@ -112,7 +112,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 * Test error thrown for bad host name.
 	 *
 	 * @expectedException \PHPUnit_Framework_Error
-	 * @expectedExceptionMessage No such host is known.
 	 */
 	public function test_http_socket_unknown_host_triggers_an_error()
 	{
