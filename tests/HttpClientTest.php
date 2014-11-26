@@ -52,6 +52,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 //		}
 		$filename = 'ignore-ringphp-test';
 		Http::setSaveFilename( $filename );
+		Http::persistSaveFile( TRUE );
 		$streamHandler = new StreamHandler();
 		// Make the request.
 		$streamHandler(array(
@@ -64,6 +65,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 				'verify' => FALSE,
 			)
 		));
+		Http::persistSaveFile();
 		// Verify the request was recorded.
 		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd' );
 		$this->assertTrue( $requestIntercepted );
@@ -78,6 +80,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 	{
 		$filename = 'ignore-guzzle-test';
 		Http::setSaveFilename( $filename );
+		Http::persistSaveFile( TRUE );
 		// Force Guzzle to use a PHP stream instead of cURL.
 		$httpClient = new Client(array(
 			'handler' => $streamHandler
@@ -90,7 +93,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 				'verify' => FALSE,
 			)
 		);
-
+		Http::persistSaveFile();
 		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd' );
 		$this->assertTrue( $requestIntercepted );
 	}
