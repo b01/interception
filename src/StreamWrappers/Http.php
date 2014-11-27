@@ -116,9 +116,16 @@ class Http implements \ArrayAccess, \Countable
 		}
 
 		// Close the resource.
-		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
 			\fclose( $this->resource );
+		}
+		else if ( $this->ssl )
+		{
+			\fclose( $this->resource );
+			// Only save the file when not loaded locally.
+			$saveFile = $this->getSaveFile();
+			\file_put_contents( $saveFile, $this->content );
 		}
 		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
 		{
