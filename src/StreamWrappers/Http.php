@@ -435,7 +435,6 @@ class Http implements \ArrayAccess, \Countable
 		$headers = '';
 		$body = '';
 		$page = ( \array_key_exists('path', $this->url) ) ? $this->url[ 'path' ] : '/';
-
 		$options = \stream_context_get_options( $this->context );
 
 		$httpOptions = [];
@@ -469,6 +468,10 @@ class Http implements \ArrayAccess, \Countable
 		{
 			$lineBreak = ( \strlen($headers) > 0 ) ? "\r\n" : '';
 			$headers = "host: {$this->url['host']}{$lineBreak}{$headers}";
+		}
+		if ( \array_key_exists('query', $this->url) )
+		{
+			$page = $page . '?' . $this->url[ 'query' ];
 		}
 		// Build the request as a string.
 		$request = \sprintf(
