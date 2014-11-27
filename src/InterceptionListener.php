@@ -15,16 +15,18 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 		/** @var string Save directory. */
 		$saveDir,
 		/** @var string */
-		$wrapperClass;
+		$wrapperClass,
+		/** @var array */
+		$wrappers;
 
 	/**
-	 * @param string $pWrapper Interception stream wrapper to register.
+	 * @param string $pWrapperClass Interception stream wrapper to register.
 	 * @param string $pSaveDir Directory where RSD files will be saved.
 	 * @throws InterceptionException
 	 */
-	public function __construct( $pWrapper, $pSaveDir = NULL )
+	public function __construct( $pWrapperClass, $pSaveDir = NULL, array $pWrappers = NULL )
 	{
-		if ( empty($pWrapper) )
+		if ( empty($pWrapperClass) )
 		{
 			throw new InterceptionException(
 				'You must set the stream wrapper class as the first argument, leave out the namespace.'
@@ -36,11 +38,18 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 				'You must set the directory where to save files as the second argument.'
 			);
 		}
-		$this->wrapperClass = $pWrapper;
+		$this->wrapperClass = $pWrapperClass;
+		$this->wrappers = $pWrappers;
 		// Substitute FIXTURES_PATH it with constant value.
 		$this->saveDir = \str_replace(
 			'FIXTURES_PATH', constant('FIXTURES_PATH'), $pSaveDir
 		);
+
+		// Set which wrapper to replace if not specified.
+		if ( $this->wrappers === NULL ) {
+			$this->wrappers = array( strtolower($this->wrapperClass) );
+		}
+
 	}
 
 	/**
@@ -51,7 +60,11 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 */
 	public function endTestSuite( \PHPUnit_Framework_TestSuite $suite )
 	{
-		return \stream_wrapper_restore( 'http' );
+		foreach ( $this->wrappers as $wrapper )
+		{
+			\stream_wrapper_restore( 'http' );
+		}
+		return TRUE;
 	}
 
 	/**
@@ -73,13 +86,15 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 */
 	public function startTestSuite( \PHPUnit_Framework_TestSuite $suite )
 	{
-		$wrapperName = strtolower( $this->wrapperClass );
-		\stream_wrapper_unregister( $wrapperName );
-		\stream_register_wrapper(
-			$wrapperName,
-			'\\Kshabazz\\Interception\\StreamWrappers\\' . $this->wrapperClass,
-			\STREAM_IS_URL
-		);
+		foreach ( $this->wrappers as $wrapper )
+		{
+			\stream_wrapper_unregister( $wrapper );
+			\stream_register_wrapper(
+				$wrapper,
+				'\\Kshabazz\\Interception\\StreamWrappers\\' . $this->wrapperClass,
+				\STREAM_IS_URL
+			);
+		}
 		Http::setSaveDir( $this->saveDir );
 	}
 }
