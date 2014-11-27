@@ -1,7 +1,7 @@
 <?php namespace Kshabazz\Tests\Interception;
 
-use \Kshabazz\Interception\InterceptionListener;
-use \Kshabazz\Interception\StreamWrappers\Http;
+use \Kshabazz\Interception\InterceptionListener,
+	\Kshabazz\Interception\StreamWrappers\Http;
 
 class RunFirst extends \PHPUnit_Framework_TestCase
 {

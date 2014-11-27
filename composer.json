@@ -13,7 +13,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Kshabazz\\Tests\\Interception\\": "tests/"
+			"Kshabazz\\Tests\\Interception\\": "tests/Interception/"
 		}
 	},
 	"description": "A PHP library that acts as a middleman for stream wrapper functions, such as fopen and fsockopen; in order to record network request and played them back.",

@@ -99,6 +99,8 @@ replacement for the code above. Instead using the manual way; you can write a un
     <listener class="\Kshabazz\Interception\InterceptionListener">
         <arguments>
             <string>Http</string>
+            <!-- If you define the constant FIXTURES_PATH,
+             you can pass that in to give your app more control. -->
             <string>./fixtures</string>
         </arguments>
     </listener>

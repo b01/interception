@@ -1,4 +1,4 @@
-<?php namespace Kshabazz\Tests\Interception;
+<?php namespace Kshabazz\Tests\Interception\StreamWrappers;
 /**
  * Test for use with Guzzle HTTP client.
  */

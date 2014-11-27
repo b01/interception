@@ -1,4 +1,4 @@
-<?php namespace Kshabazz\Tests\Interception;
+<?php namespace Kshabazz\Tests\Interception\StreamWrappers;
 
 use \Kshabazz\Interception\StreamWrappers\Http;
 
