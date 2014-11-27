@@ -48,5 +48,11 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 		$unregistered = $listener->endTestSuite( new \PHPUnit_Framework_TestSuite() );
 		$this->assertTrue( $unregistered );
 	}
+
+	public function test_setting_save_direcotry()
+	{
+		$direcotrySet = InterceptionListener::setSaveDir( FIXTURES_PATH );
+		$this->assertTrue( $direcotrySet );
+	}
 }
 ?>

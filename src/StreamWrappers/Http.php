@@ -298,7 +298,7 @@ class Http implements \ArrayAccess, \Countable
 	}
 
 	/**
-	 * Set where to save raw socket data files.
+	 * Get directory where to save raw socket data files.
 	 *
 	 * @return string
 	 */

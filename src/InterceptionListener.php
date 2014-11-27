@@ -11,18 +11,20 @@ use Kshabazz\Interception\StreamWrappers\Http;
  */
 class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implements \PHPUnit_Framework_TestListener
 {
+	static private
+		/** @var string Save directory. */
+		$saveDir;
+
 	private
-		/** @var string save path. */
-		$savePath,
 		/** @var string */
 		$wrapperClass;
 
 	/**
 	 * @param string $pWrapper Interception stream wrapper to register.
-	 * @param string $pSavePath
+	 * @param string $pSaveDir Directory where RSD files will be saved.
 	 * @throws InterceptionException
 	 */
-	public function __construct( $pWrapper, $pSavePath )
+	public function __construct( $pWrapper, $pSaveDir )
 	{
 		if ( empty($pWrapper) )
 		{
@@ -30,14 +32,14 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 				'You must set the stream wrapper class as the first argument, leave out the namespace.'
 			);
 		}
-		if ( empty($pSavePath) )
+		if ( empty($pSaveDir) )
 		{
 			throw new InterceptionException(
 				'You must set the path where the stream wrapper class can save files as the second argument.'
 			);
 		}
 		$this->wrapperClass = $pWrapper;
-		$this->savePath = $pSavePath;
+		self::setSaveDir( $pSaveDir );
 	}
 
 	/**
@@ -78,7 +80,33 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 			'\\Kshabazz\\Interception\\StreamWrappers\\' . $this->wrapperClass,
 			\STREAM_IS_URL
 		);
-		Http::setSaveDir( $this->savePath );
+		Http::setSaveDir( self::getSaveDir() );
+	}
+
+	/**
+	 * Set where to save raw socket data files.
+	 *
+	 * @return string
+	 */
+	static public function getSaveDir()
+	{
+		return self::$saveDir;
+	}
+
+	/**
+	 * Set directory to save socket data files.
+	 *
+	 * @param $pDirectory
+	 * @return bool
+	 */
+	static public function setSaveDir( $pDirectory )
+	{
+		if ( \is_dir($pDirectory) )
+		{
+			self::$saveDir = \realpath( $pDirectory );
+			return TRUE;
+		}
+		return FALSE;
 	}
 }
 ?>
