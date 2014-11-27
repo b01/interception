@@ -26,7 +26,7 @@ class Http implements \ArrayAccess, \Countable
 
 	public static
 		/** @var string Directory to save raw files. */
-		$saveDir = '.',
+		$saveDir = NULL,
 		/** @var string */
 		$saveFile = '',
 		/** @var bool Prevent the save file from being cleared on close. */
@@ -301,9 +301,16 @@ class Http implements \ArrayAccess, \Countable
 	 * Get directory where to save raw socket data files.
 	 *
 	 * @return string
+	 * @throws \Kshabazz\Interception\InterceptionException
 	 */
 	static public function getSaveDir()
 	{
+		// When not set.
+		if ( !\is_dir(self::$saveDir) )
+		{
+			throw new InterceptionException( 'Please set a directory to save the request files.' );
+		}
+
 		return self::$saveDir;
 	}
 
@@ -446,12 +453,14 @@ class Http implements \ArrayAccess, \Countable
 	private function getSaveFile()
 	{
 		$filename = self::getSaveFilename();
-		// When not set by the developer.
+		// When not set.
 		if ( empty($filename) )
 		{
 			throw new InterceptionException( 'Please set a filename to save the contents of the request' );
 		}
 		$ext = '.rsd';
+
+		// Build file path.
 		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
 	}
 
@@ -474,7 +483,7 @@ class Http implements \ArrayAccess, \Countable
 		// Read the headers from the resource.
 		while ( !$done )
 		{
-			$buffer = $this->readFromResource(1);
+			$buffer = $this->readFromResource( 1 );
 			// Update stream
 			$this->content .= $buffer;
 			$header = \strstr( $this->content, "\r\n\r\n", TRUE );

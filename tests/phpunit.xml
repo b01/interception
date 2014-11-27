@@ -3,6 +3,9 @@
 		 strict="true"
 		 checkForUnintentionallyCoveredCode="true">
 	<testsuites>
+		<testsuite name="RunFirst">
+			<file>./RunFirst.php</file>
+		</testsuite>
 		<testsuite name="All">
 			<directory>.</directory>
 		</testsuite>
