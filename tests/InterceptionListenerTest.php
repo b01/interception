@@ -33,15 +33,6 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 		$listener = new InterceptionListener( NULL, './fixtures' );
 	}
 
-	/**
-	 * @expectedException \Kshabazz\Interception\InterceptionException
-	 * @expectedExceptionMessage You must set the path where the stream wrapper class can save files as the second argument.
-	 */
-	public function test_no_save_path()
-	{
-		$listener = new InterceptionListener( 'Http', NULL );
-	}
-
 	public function test_tearDown()
 	{
 		$listener = new InterceptionListener( 'Http', FIXTURES_PATH );

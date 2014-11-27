@@ -24,7 +24,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 * @param string $pSaveDir Directory where RSD files will be saved.
 	 * @throws InterceptionException
 	 */
-	public function __construct( $pWrapper, $pSaveDir )
+	public function __construct( $pWrapper, $pSaveDir = NULL )
 	{
 		if ( empty($pWrapper) )
 		{
@@ -32,14 +32,11 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 				'You must set the stream wrapper class as the first argument, leave out the namespace.'
 			);
 		}
-		if ( empty($pSaveDir) )
+		if ( !empty($pSaveDir) )
 		{
-			throw new InterceptionException(
-				'You must set the path where the stream wrapper class can save files as the second argument.'
-			);
+			self::setSaveDir( $pSaveDir );
 		}
 		$this->wrapperClass = $pWrapper;
-		self::setSaveDir( $pSaveDir );
 	}
 
 	/**
