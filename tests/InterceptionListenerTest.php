@@ -14,7 +14,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_interception_annotation()
 	{
-		$listener = new InterceptionListener( 'Http', './fixtures' );
+		$listener = new InterceptionListener( 'Http', FIXTURES_PATH );
 		$suite = new \PHPUnit_Framework_TestSuite();
 		$listener->startTestSuite( $suite );
 		$listener->startTest( $this );
@@ -44,7 +44,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 
 	public function test_tearDown()
 	{
-		$listener = new InterceptionListener( 'Http', './fixtures' );
+		$listener = new InterceptionListener( 'Http', FIXTURES_PATH );
 		$unregistered = $listener->endTestSuite( new \PHPUnit_Framework_TestSuite() );
 		$this->assertTrue( $unregistered );
 	}
@@ -53,6 +53,16 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	{
 		$direcotrySet = InterceptionListener::setSaveDir( FIXTURES_PATH );
 		$this->assertTrue( $direcotrySet );
+	}
+
+	/**
+	 * @@expectedException \Kshabazz\Interception\InterceptionException
+	 * @expectedExceptionMessage No such directory test1234
+	 */
+	public function test_setting_fake_save_direcotry()
+	{
+		$direcotrySet = InterceptionListener::setSaveDir( 'test1234' );
+		$this->assertFalse( $direcotrySet );
 	}
 }
 ?>

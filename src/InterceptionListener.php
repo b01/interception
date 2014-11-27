@@ -58,7 +58,6 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 */
 	public function startTest( \PHPUnit_Framework_Test $test )
 	{
-		// TODO: Get @intercept filename from doc-block.
 		$annotationKey = 'interception';
 		$annotations = $test->getAnnotations();
 		if ( \array_key_exists($annotationKey, $annotations['method']) )
@@ -98,15 +97,16 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	 *
 	 * @param $pDirectory
 	 * @return bool
+	 * @throws InterceptionException
 	 */
 	static public function setSaveDir( $pDirectory )
 	{
-		if ( \is_dir($pDirectory) )
+		if ( !\is_dir($pDirectory) )
 		{
-			self::$saveDir = \realpath( $pDirectory );
-			return TRUE;
+			throw new InterceptionException( 'No such directory ' . $pDirectory );
 		}
-		return FALSE;
+		self::$saveDir = \realpath( $pDirectory );
+		return TRUE;
 	}
 }
 ?>
