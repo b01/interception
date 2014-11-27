@@ -39,6 +39,8 @@ class Http implements \ArrayAccess, \Countable
 		$resource,
 		/** @var int */
 		$resourceType,
+		/** @var bool */
+		$ssl,
 		/** @var string */
 		$url,
 		/** @var array */
@@ -53,6 +55,7 @@ class Http implements \ArrayAccess, \Countable
 		$this->position = 0;
 		$this->resource = NULL;
 		$this->resourceType = NULL;
+		$this->ssl = FALSE;
 		$this->url = NULL;
 		$this->wrapperData = NULL;
 	}
@@ -113,7 +116,7 @@ class Http implements \ArrayAccess, \Countable
 		}
 
 		// Close the resource.
-		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
 			\fclose( $this->resource );
 		}
@@ -142,7 +145,7 @@ class Http implements \ArrayAccess, \Countable
 		// Start off assuming the EOF has been reached.
 		$eof = TRUE;
 
-		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
 			$eof = \feof( $this->resource );
 		}
@@ -194,7 +197,8 @@ class Http implements \ArrayAccess, \Countable
 		{
 			$this->resourceType = self::RESOURCE_TYPE_SOCKET;
 			$timeout = ini_get( 'default_socket_timeout' );
-			$port = 80;
+			$this->ssl = ( \strcmp($this->url['scheme'], 'https') === 0 );
+			$port = ( $this->ssl ) ? 443 : 80;
 			// When port is specified, use that.
 			if ( \array_key_exists('port', $this->url) )
 			{
@@ -210,33 +214,61 @@ class Http implements \ArrayAccess, \Countable
 				$timeout = array_key_exists('timeout', $httpOptions) ? $httpOptions['timeout'] : $timeout;
 			}
 
-			// Init socket resource.
-			$this->resource = \socket_create(\AF_INET, \SOCK_STREAM, \SOL_TCP);
-			if ( !is_resource($this->resource) )
+			if ( $this->ssl ) // HTTPS
 			{
-				\trigger_error( 'Unable to connect to ' . $this->url['host'] );
-				return FALSE;
+				$remoteSocket = sprintf('ssl://%s:%d', $this->url['host'], $port );
+				$this->resource = \stream_socket_client(
+					$remoteSocket,
+					$errorNo,
+					$errorStr,
+					$timeout,
+					( $pFlags ?: \STREAM_CLIENT_CONNECT ),
+					$this->context
+				);
+
+				if ( $errorNo > 0 ) {
+					\trigger_error($errorStr);
+				}
+			}
+			else // HTTP
+			{
+				// Init socket resource.
+				$this->resource = \socket_create( \AF_INET, \SOCK_STREAM, \SOL_TCP );
+				if ( !is_resource( $this->resource ) )
+				{
+					\trigger_error( 'Unable to connect to ' . $this->url[ 'host' ] );
+					return FALSE;
+				}
+
+				// Attempt to connect.
+				$isConnected = @\socket_connect( $this->resource, $this->url[ 'host' ], $port );
+				if ( !$isConnected )
+				{
+					$this->triggerSocketError();
+					return FALSE;
+				}
 			}
 
-			// Attempt to connect.
-			$isConnected = @\socket_connect( $this->resource, $this->url['host'], $port );
-			if ( !$isConnected )
-			{
-				$this->triggerSocketError();
-				return FALSE;
-			}
 			// TODO: figure out when to set blocking mode.
 			if ( $pFlags !== 0 ) {
 				// TODO: Handle flags.
 			}
 
 			$request = $this->buildRequest( $httpOptions );
-			$lengthToWrite = \strlen($request);
+			$lengthToWrite = \strlen( $request );
 			$lengthWritten = 0;
 			// Send the request.
 			do
 			{
-				$lengthWritten += \socket_write( $this->resource, $request );
+				if ( $this->ssl )
+				{
+					$lengthWritten += \fputs( $this->resource, $request );
+				}
+				else
+				{
+					$lengthWritten += \socket_write( $this->resource, $request );
+				}
+
 				if ( $lengthWritten >= $lengthToWrite ) {
 					break;
 				}
@@ -542,7 +574,7 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	private function readFromResource( $pCount = 100 )
 	{
-		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
 		{
 			$buffer = \fread( $this->resource, $pCount );
 			return $buffer;
