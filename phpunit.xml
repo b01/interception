@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<phpunit bootstrap="bootstrap.php"
+<phpunit bootstrap="tests/bootstrap.php"
 		 strict="true"
 		 checkForUnintentionallyCoveredCode="true">
 	<testsuites>
@@ -7,15 +7,15 @@
 			<file>./RunFirst.php</file>
 		</testsuite>
 		<testsuite name="All">
-			<directory>.</directory>
+			<directory>tests</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
 		<blacklist>
-			<directory>..</directory>
+			<directory>.</directory>
 		</blacklist>
 		<whitelist>
-			<directory suffix=".php">../src</directory>
+			<directory suffix=".php">./src</directory>
 		</whitelist>
 	</filter>
 </phpunit>
