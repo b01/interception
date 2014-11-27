@@ -30,7 +30,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_no_stream_wrapper_class()
 	{
-		$listener = new InterceptionListener( NULL, './fixtures' );
+		( new InterceptionListener(NULL, FIXTURES_PATH) );
 	}
 
 	public function test_tearDown()
@@ -40,20 +40,13 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 		$this->assertTrue( $unregistered );
 	}
 
-	public function test_setting_save_direcotry()
-	{
-		$direcotrySet = InterceptionListener::setSaveDir( FIXTURES_PATH );
-		$this->assertTrue( $direcotrySet );
-	}
-
 	/**
-	 * @@expectedException \Kshabazz\Interception\InterceptionException
-	 * @expectedExceptionMessage No such directory test1234
+	 * @expectedException \Kshabazz\Interception\InterceptionException
+	 * @expectedExceptionMessage You must set the directory where to save files as the second argument
 	 */
-	public function test_setting_fake_save_direcotry()
+	public function test_setting_save_invlaid_directory()
 	{
-		$direcotrySet = InterceptionListener::setSaveDir( 'test1234' );
-		$this->assertFalse( $direcotrySet );
+		( new InterceptionListener('Http', NULL) );
 	}
 }
 ?>
