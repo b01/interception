@@ -288,15 +288,20 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 	public function test_save_file_persist()
 	{
-		$filename = 'www-example-com';
-		Http::setSaveFilename( $filename );
-		Http::persistSaveFile( TRUE );
+		$filename = 'ignore-persist-file-test';
+		Http::persistSaveFile( $filename );
 		\file_get_contents( 'http://www.example.com/' );
 		\file_get_contents( 'http://www.example.com/' );
 		$actual = Http::getSaveFilename();
 		// Turn this off or we break other tests.
-		Http::persistSaveFile( FALSE );
+		Http::clearPersistSaveFile();
+
+		$file1 = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '-1.rsd' );
+		$file2 = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '-2.rsd' );
+
 		$this->assertContains( $filename, $actual );
+		$this->assertTrue( $file1 );
+		$this->assertTrue( $file2 );
 	}
 }
 ?>

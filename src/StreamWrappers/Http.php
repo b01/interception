@@ -25,6 +25,8 @@ class Http implements \ArrayAccess, \Countable
 		$position;
 
 	public static
+		/** @var int Increment file when $saveFilePersist is true. */
+		$persistFileIncrement = 0,
 		/** @var string Directory to save raw files. */
 		$saveDir = NULL,
 		/** @var string */
@@ -192,9 +194,14 @@ class Http implements \ArrayAccess, \Countable
 		// TODO: Find out what needs to happen when the path is already open. I may have misunderstood here.
 
 		$this->url = \parse_url( $pPath );
+		//
+		if ( self::$saveFilePersist )
+		{
+			++self::$persistFileIncrement;
+		}
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile();
-		// Load from local cache, or from the network.
+		// Load from local file, or make an internet request.
 		if ( \file_exists($localFile) )
 		{
 			$this->resourceType = self::RESOURCE_TYPE_FILE;
@@ -320,14 +327,27 @@ class Http implements \ArrayAccess, \Countable
 	}
 
 	/**
+	 * Clear the persist save filename.
+	 *
+	 * @return bool TRUE when save file is cleared.
+	 */
+	static public function clearPersistSaveFile()
+	{
+		self::$saveFilePersist = FALSE;
+		self::$persistFileIncrement = 0;
+
+		return self::clearSaveFile();
+	}
+
+	/**
 	 * Clear the save file name.
 	 *
-	 * @return bool
+	 * @return bool TRUE when save file is cleared, FALSE when $saveFilePersist is TRUE.
 	 */
 	static public function clearSaveFile()
 	{
 		// Clear the save file, unless explicitly told not to.
-		if ( self::$saveFilePersist === FALSE )
+		if ( !self::$saveFilePersist )
 		{
 			self::$saveFile = '';
 			return TRUE;
@@ -366,17 +386,28 @@ class Http implements \ArrayAccess, \Countable
 	/**
 	 * Allow the save file name to persist, until called with FALSE.
 	 *
-	 * @param bool $pPersist
+	 * @param string $pPersistFilename
 	 * @return bool Current setting.
 	 */
-	static public function persistSaveFile( $pPersist = FALSE )
+	static public function persistSaveFile( $pPersistFilename )
 	{
-		if ( \is_bool($pPersist) )
-		{
-			self::$saveFilePersist = $pPersist;
-		}
-
+		self::$saveFilePersist = self::setSaveFilename( $pPersistFilename );
 		return self::$saveFilePersist;
+	}
+
+	/**
+	 * Add a suffix to the file to prevent overwriting when persisting save file.
+	 *
+	 * @return string
+	 */
+	static public function persistSuffix()
+	{
+		$suffix = '';
+		if ( self::$saveFilePersist )
+		{
+			$suffix = '-' . self::$persistFileIncrement;
+		}
+		return $suffix;
 	}
 
 	/**
@@ -403,19 +434,34 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	static public function setSaveFilename( $pFilename )
 	{
+		if ( self::isValidFilename($pFilename) )
+		{
+			self::$saveFile = $pFilename;
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Validate a name filename.
+	 *
+	 * @param $pFilename
+	 * @return bool
+	 */
+	static private function isValidFilename( $pFilename )
+	{
 		// A filename must not contain the following chars:
 		$invalidChars = [ ',', '<', '>', '*', '?', '|', '\\', '/', "'", '"', ':' ];
 		// Build regular expression.
 		$invalidCharRegExPatter = '@'. implode( $invalidChars ) . '@';
-
 		// Notify the developer when a filename contains invalid characters.
 		if ( \preg_match($invalidCharRegExPatter, $pFilename) === 1 )
 		{
 			\trigger_error( 'A filename cannot contain the following characters: ' . implode('', $invalidChars) );
+			// When trigger errors are silenced.
 			return FALSE;
 		}
-
-		self::$saveFile = $pFilename;
 		return TRUE;
 	}
 
@@ -494,7 +540,7 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	private function getSaveFile()
 	{
-		$filename = self::getSaveFilename();
+		$filename = self::getSaveFilename() . self::persistSuffix();
 		// When not set.
 		if ( empty($filename) )
 		{
@@ -505,7 +551,6 @@ class Http implements \ArrayAccess, \Countable
 		// Build file path.
 		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
 	}
-
 
 	/**
 	 * Parse the content for the headers.
