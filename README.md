@@ -128,5 +128,5 @@ It will automatically register/unregister the Interception Http stream wrapper c
 ## Run Unit Test
 
 ```bash
-phpunit.phar -c test/phpunit.xml
+./vendor/bin/phpunit
 ```
