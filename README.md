@@ -94,6 +94,18 @@ class to add the "@interception" annotation. This works as a replacement
 for the manual way, and automates saving and serving up HTTP request
 during runs.
 
+Define the FIXTURES_PATH constant in your bootstrap file.
+```php
+<?php
+
+...
+
+// Set fixture path to what ever you like.
+$fixturesPath = \realpath( __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' );
+\define( 'FIXTURES_PATH', $fixturesPath );
+?>
+```
+
 In your PHP Unit configuration file, add the listener like so:
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -120,10 +132,10 @@ In your PHP Unit configuration file, add the listener like so:
 </phpunit>
 ```
 
+Now you can write unit test as follows:
 ```php
-// Then in you unit test:
 /**
- * Setup and tear down will happen in the InterceptionListener class.
+ * Now the HTTP request will be stored in the fiel "ignore-annotation-test.rsd"
  *
  * @interception ignore-annotation-test
  */
@@ -136,7 +148,10 @@ public function test_interception_annotation()
 }
 ```
 
-It will automatically register/unregister the Interception Http stream wrapper class for the test suite.
+## How do I update responses.
+
+1. Delete the *.rsd file in your fixtures directory, so the next time you
+   run tests, a new one will be saved.
 
 ## Run Unit Test
 
