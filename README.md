@@ -12,8 +12,7 @@ stream wrapper is unregistered.
 
 ## Requirements
 
-* PHP 5.6
-* PHP Streams
+* PHP ~5.4
 
 ## Roadmap
 
@@ -93,18 +92,30 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 You can Simplify your life by using the InterceptionListener with the @interception annotation. This works as a
 replacement for the code above. Instead using the manual way; you can write a unit test as follows:
 
+In your phpunit.xml add the listener like so:
 ```xml
-<!-- in your phpunit.xml add the listener like so: -->
-<listeners>
-    <listener class="\Kshabazz\Interception\InterceptionListener">
-        <arguments>
-            <string>Http</string>
-            <!-- If you define the constant FIXTURES_PATH,
-             you can pass that in to give your app more control. -->
-            <string>./fixtures</string>
-        </arguments>
-    </listener>
-</listeners>
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="tests/bootstrap.php"
+         strict="true"
+         checkForUnintentionallyCoveredCode="true">
+     ...
+    <listeners>
+        <listener class="\Kshabazz\Interception\InterceptionListener">
+            <arguments>
+                <string>Http</string>
+                <string>FIXTURES_PATH</string>
+                <array>
+                    <element>
+                        <string>http</string>
+                    </element>
+                    <element>
+                        <string>https</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+</phpunit>
 ```
 
 ```php
