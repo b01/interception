@@ -38,7 +38,7 @@ all have independent TCP resources. They will each save a file on \fclose, with 
 
 ## Examples
 
-### How to save HTTP request for playback during unit test.
+### How to save HTTP request for playback during unit test (Manual way)
 
 ```php
 use \Kshabazz\Interception\StreamWrappers\Http;
@@ -87,12 +87,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 }
 ```
 
-### How to use the Interception test listener with PHPUnit
+### How to use the Interception test listener with PHPUnit (Streamline way)
 
-You can Simplify your life by using the InterceptionListener with the @interception annotation. This works as a
-replacement for the code above. Instead using the manual way; you can write a unit test as follows:
+You can further simplify saving request by using the InterceptionListener
+class to add the "@interception" annotation. This works as a replacement
+for the manual way, and automates saving and serving up HTTP request
+during runs.
 
-In your phpunit.xml add the listener like so:
+In your PHP Unit configuration file, add the listener like so:
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit bootstrap="tests/bootstrap.php"
