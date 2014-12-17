@@ -21,10 +21,10 @@
 	"license": "MIT",
 	"name": "kshabazz/interception",
 	"require": {
-		"php": "~5"
+		"php": "~5.4"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "~4",
+		"phpunit/phpunit": "~4.1",
 		"guzzlehttp/guzzle": "~5.0"
 	},
 	"type": "library"
