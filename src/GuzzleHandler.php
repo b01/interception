@@ -24,6 +24,7 @@
  * }
  */
 
+use GuzzleHttp\Ring\Client\ClientUtils;
 use GuzzleHttp\Ring\Core;
 use GuzzleHttp\Ring\Exception\ConnectException;
 use GuzzleHttp\Ring\Exception\RingException;
