@@ -14,7 +14,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_interception_annotation()
 	{
-		$listener = new InterceptionListener( 'Http', FIXTURES_PATH );
+		$listener = new InterceptionListener( 'Http', FIXTURES_PATH, ['http'] );
 		$suite = new \PHPUnit_Framework_TestSuite();
 		$listener->startTestSuite( $suite );
 		$listener->startTest( $this );
@@ -30,12 +30,12 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_no_stream_wrapper_class()
 	{
-		( new InterceptionListener(NULL, NULL) );
+		( new InterceptionListener(NULL, NULL, ['http']) );
 	}
 
 	public function test_tearDown()
 	{
-		$listener = new InterceptionListener( 'Http', FIXTURES_PATH );
+		$listener = new InterceptionListener( 'Http', FIXTURES_PATH, ['http'] );
 		$unregistered = $listener->endTestSuite( new \PHPUnit_Framework_TestSuite() );
 		$this->assertTrue( $unregistered );
 	}
@@ -46,7 +46,17 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_setting_save_invlaid_directory()
 	{
-		( new InterceptionListener('Http', NULL) );
+		( new InterceptionListener('Http', NULL, ['http']) );
+	}
+
+	/**
+	 * @expectedException \Kshabazz\Interception\InterceptionException
+	 * @expectedExceptionMessage Constant "bad directory"
+	 */
+	public function test_bad_constant_for_path()
+	{
+		define('FAKE_PATH', 'bad directory');
+		( new InterceptionListener('Http', 'FAKE_PATH', ['http'] ) );
 	}
 }
 ?>
