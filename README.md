@@ -12,11 +12,8 @@ stream wrapper is unregistered.
 
 ## Requirements
 
-* PHP ~5.4
+* PHP 5.4+
 
-## Roadmap
-
-* Get to work with RingPHP StreamWrapper.
 
 ## How it works
 
@@ -87,26 +84,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 }
 ```
 
-### How to use the Interception test listener with PHPUnit (Streamline way)
+### How to use the Interception test listener with PHPUnit (in a streamlined way)
 
-You can further simplify saving request by using the InterceptionListener
-class to add the "@interception" annotation. This works as a replacement
-for the manual way, and automates saving and serving up HTTP request
-during runs.
+Interception comes with a PHPUnit test listener which allows you to use annotations with your unit test to simplify
+saving request. This works as a replacement for the manual way, and automates saving and serving up HTTP request
+during runs. There requires some additional setup however.
 
-Define the FIXTURES_PATH constant in your bootstrap file.
+1. Set a constant that points to the path where you want the request to be save. This can be done in your unit test
+   bootstrap file, assuming you have one, like so:
 ```php
 <?php
-
 ...
-
-// Set fixture path to what ever you like.
+// Define a FIXTURES_PATH constant in your bootstrap file, set to whatever path you like.
 $fixturesPath = \realpath( __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' );
 \define( 'FIXTURES_PATH', $fixturesPath );
+...
 ?>
 ```
-
-In your PHP Unit configuration file, add the listener like so:
+2. In your PHP Unit configuration file, add the listener like so:
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit bootstrap="tests/bootstrap.php"
@@ -135,19 +130,18 @@ In your PHP Unit configuration file, add the listener like so:
 </phpunit>
 ```
 
-Now you can write unit test as follows:
+3. Now you can write unit test and use the "@interception" annotation.
 ```php
 /**
- * Now the HTTP request will be stored in the fiel "ignore-annotation-test.rsd"
+ * Now the HTTP request will be stored in the file "example-dot-com.rsd"
  *
- * @interception ignore-annotation-test
+ * @interception example-dot-com
  */
 public function test_interception_annotation()
 {
-    $handle = \fopen( 'http://www.example.com/', 'r' );
-    \fclose( $handle );
-    $filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore-annotation-test.rsd';
-    $this->assertTrue( \file_exists($filename) );
+    $responseBody = file_get_content( 'http://www.example.com/', 'r' );
+    $filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'example-dot-com.rsd';
+    $this->assertFileExists( \file_exists($filename) );
 }
 ```
 

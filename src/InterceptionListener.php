@@ -9,7 +9,7 @@ use Kshabazz\Interception\StreamWrappers\Http;
  *
  * @package \Kshabazz\Interception
  */
-class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implements \PHPUnit_Framework_TestListener
+class InterceptionListener extends \PHPUnit_Framework_BaseTestListener
 {
 	const
 		STREAM_WRAPPER_NAME_SPACE = '\\Kshabazz\\Interception\\StreamWrappers\\';
@@ -37,33 +37,33 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	{
 		$wrapperClass = self::STREAM_WRAPPER_NAME_SPACE . $pWrapperClass;
 
-		if ( empty($pWrapperClass) || !class_exists($wrapperClass) )
+		if ( empty($pWrapperClass) || !\class_exists($wrapperClass) )
 		{
 			throw new InterceptionException( InterceptionException::BAD_STREAM_WRAPPER );
 		}
 
 		// Use a directory that exists or a constant that is defined to a directory that exists.
+		// When the save directory is not a path.
 		if ( !\is_dir($pSaveDir) )
 		{
-			if ( defined($pSaveDir) )
-			{
-				// When path is stored in constant.
-				$pSaveDir = constant( $pSaveDir );
-				if ( !\is_dir( $pSaveDir ) )
-				{
-					throw new InterceptionException( InterceptionException::BAD_SAVE_CONST, [$pSaveDir] );
-				}
-			}
-			else
+			// nor a constant.
+			if ( !\defined($pSaveDir) )
 			{
 				throw new InterceptionException( InterceptionException::BAD_SAVE_DIR );
+			}
+			// Attempt to extract the path stored in constant.
+			$pSaveDir = \constant( $pSaveDir );
+			// When the constant did not contain a valid path.
+			if ( !\is_dir( $pSaveDir ) )
+			{
+				throw new InterceptionException( InterceptionException::BAD_SAVE_CONST, [$pSaveDir] );
 			}
 		}
 
 		$this->wrapperClass = $pWrapperClass;
 		$this->wrappers = $pWrappers;
 		$this->saveDir = $pSaveDir;
-		$this->multiIntercept = 'interception-persist';
+		$this->multiIntercept = 'interceptions';
 		$this->singleIntercept = 'interception';
 	}
 

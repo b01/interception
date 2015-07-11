@@ -1,41 +1,66 @@
 <?php namespace Kshabazz\Tests\Interception;
 
 use \Kshabazz\Interception\InterceptionListener;
+use Kshabazz\Interception\StreamWrappers\Http;
 
 /**
  * Class InterceptionListenerTest
  *
  * @package \Kshabazz\Tests\Interception
+ * @coversDefaultClass \Kshabazz\Interception\InterceptionListener
  */
 class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 {
+	/** @var string */
+	private $fixtureDir;
+
+	/** @var \PHPUnit_Framework_TestSuite */
+	private $suite;
+
+	public function setUp()
+	{
+		$this->fixtureDir = \FIXTURES_PATH;
+		$this->suite = new \PHPUnit_Framework_TestSuite();
+	}
+
 	/**
 	 * @interception ignore-annotation-test
+	 * @covers ::__construct
 	 */
-	public function test_interception_annotation()
+	public function test_initialization()
 	{
-		$listener = new InterceptionListener( 'Http', FIXTURES_PATH, ['http'] );
-		$suite = new \PHPUnit_Framework_TestSuite();
-		$listener->startTestSuite( $suite );
+		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
+		$this->assertInstanceOf( '\\Kshabazz\\Interception\\InterceptionListener', $listener );
+	}
+
+	/**
+	 * @interception ignore-annotation-test
+	 * @covers ::startTest
+	 */
+	public function test_interception_used_annotation_for_filename()
+	{
+		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
+		$listener->startTestSuite( $this->suite );
 		$listener->startTest( $this );
-		$handle = \fopen( 'http://www.example.com/', 'r' );
-		\fclose( $handle );
-		$filename = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore-annotation-test.rsd';
-		$this->assertTrue( \file_exists($filename) );
+		$this->assertEquals( 'ignore-annotation-test', Http::getSaveFilename() );
 	}
 
 	/**
 	 * @expectedException \Kshabazz\Interception\InterceptionException
 	 * @expectedExceptionMessage You must set the stream wrapper class as the first argument, leave out the namespace.
+	 * @covers ::__construct
 	 */
 	public function test_no_stream_wrapper_class()
 	{
 		( new InterceptionListener(NULL, NULL, ['http']) );
 	}
 
-	public function test_tearDown()
+	/**
+	 * @covers ::endTestSuite
+	 */
+	public function test_endTestSuite()
 	{
-		$listener = new InterceptionListener( 'Http', FIXTURES_PATH, ['http'] );
+		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
 		$unregistered = $listener->endTestSuite( new \PHPUnit_Framework_TestSuite() );
 		$this->assertTrue( $unregistered );
 	}
@@ -43,20 +68,107 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @expectedException \Kshabazz\Interception\InterceptionException
 	 * @expectedExceptionMessage Second argument must be a directory where to save RSD files
+	 * @covers ::__construct
 	 */
-	public function test_setting_save_invlaid_directory()
+	public function test_setting_save_invalid_directory()
 	{
-		( new InterceptionListener('Http', NULL, ['http']) );
+		( new InterceptionListener( 'Http', NULL, ['http']) );
 	}
 
 	/**
 	 * @expectedException \Kshabazz\Interception\InterceptionException
 	 * @expectedExceptionMessage Constant "bad directory"
+	 * @covers ::__construct
 	 */
 	public function test_bad_constant_for_path()
 	{
-		define('FAKE_PATH', 'bad directory');
-		( new InterceptionListener('Http', 'FAKE_PATH', ['http'] ) );
+		define( 'BAD_PATH', 'bad directory' );
+		( new InterceptionListener('Http', 'BAD_PATH', ['http']) );
+	}
+
+	/**
+	 * @interception xml-rss-feed
+	 * @covers ::startTestSuite
+	 * @covers ::startTest
+	 */
+	public function test_loading_xml_with_file_get_contents()
+	{
+		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+
+		// Get the listener to register the interception HTTP stream wrapper.
+		$listener->startTestSuite( $this->suite );
+
+		// Now get the listener to set the save file from the annotation on this test.
+		$listener->startTest( $this );
+
+		// Now lets see how the stream wrapper XML.
+		$output = \file_get_contents(
+			'http://www.quickenloans.com/blog/category/mortgage/mortgage-basics/feed'
+		);
+
+		$fixture = $this->fixtureDir . DIRECTORY_SEPARATOR . 'xml-rss-feed.rsd';
+
+		$this->assertFileExists( $fixture );
+	}
+
+	/**
+	 * @interception xml-rss-feed
+	 * @covers ::startTestSuite
+	 * @covers ::startTest
+	 * @covers ::endTest
+	 */
+	public function test_xml()
+	{
+		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+
+		// Get the listener to register the interception HTTP stream wrapper.
+		$listener->startTestSuite( $this->suite );
+
+		// Now get the listener to set the save file from the annotation on this test.
+		$listener->startTest( $this );
+
+		// Now lets see how the stream wrapper XML.
+		$output = \file_get_contents(
+			'http://www.quickenloans.com/blog/category/mortgage/mortgage-basics/feed'
+		);
+
+		// Clean up
+		$listener->endTest( $this, NULL );
+		$listener->endTestSuite( $this->suite  );
+
+		$fixture = $this->fixtureDir . DIRECTORY_SEPARATOR . 'xml-rss-feed.rsd';
+
+		$this->assertFileExists( $fixture );
+	}
+
+	/**
+	 * @interceptions google
+	 * @covers ::startTestSuite
+	 * @covers ::startTest
+	 * @covers ::endTest
+	 */
+	public function test_multiple_request()
+	{
+		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+
+		// Get the listener to register the interception HTTP stream wrapper.
+		$listener->startTestSuite( $this->suite );
+
+		// Now get the listener to set the save file from the annotation on this test.
+		$listener->startTest( $this );
+
+		// Now lets see how the stream wrapper XML.
+		$output = \file_get_contents( 'http://www.google.com/' );
+		$output = \file_get_contents( 'http://www.google.com/' );
+
+		// Clean up
+		$listener->endTest( $this, NULL );
+		$listener->endTestSuite( $this->suite  );
+
+		$fixture = $this->fixtureDir . DIRECTORY_SEPARATOR . 'google-';
+
+		$this->assertFileExists( $fixture . '1.rsd');
+		$this->assertFileExists( $fixture . '2.rsd');
 	}
 }
 ?>
