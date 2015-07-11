@@ -27,13 +27,11 @@
 use GuzzleHttp\Ring\Client\ClientUtils;
 use GuzzleHttp\Ring\Core;
 use GuzzleHttp\Ring\Exception\ConnectException;
-use GuzzleHttp\Ring\Exception\RingException;
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
 use GuzzleHttp\Stream\InflateStream;
 use GuzzleHttp\Stream\StreamInterface;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\Utils;
-use GuzzleHttp\Ring\Client\StreamHandler;
 
 /**
  * Class GuzzleHandler
@@ -41,7 +39,7 @@ use GuzzleHttp\Ring\Client\StreamHandler;
  * @package Kshabazz\Interception
  * @codeCoverageIgnore
  */
-class GuzzleHandler extends StreamHandler
+class GuzzleHandler
 {
 	private $options;
 
@@ -60,7 +58,7 @@ class GuzzleHandler extends StreamHandler
 			$request = Core::removeHeader($request, 'Expect');
 			$stream = $this->createStream($url, $request, $headers);
 			return $this->createResponse($request, $url, $headers, $stream);
-		} catch (RingException $e) {
+		} catch (\Exception $e) {
 			return $this->createErrorResponse($url, $e);
 		}
 	}
@@ -143,11 +141,11 @@ class GuzzleHandler extends StreamHandler
 	 * Creates an error response for the given stream.
 	 *
 	 * @param string        $url
-	 * @param RingException $e
+	 * @param \Exception $e
 	 *
 	 * @return array
 	 */
-	private function createErrorResponse($url, RingException $e)
+	private function createErrorResponse($url, \Exception $e)
 	{
 		// Determine if the error was a networking error.
 		$message = $e->getMessage();
@@ -174,7 +172,7 @@ class GuzzleHandler extends StreamHandler
 	 * @param callable $callback Callable that returns stream resource
 	 *
 	 * @return resource
-	 * @throws \RuntimeException on error
+	 * @throws \Exception on error
 	 */
 	private function createResource(callable $callback)
 	{
@@ -190,7 +188,7 @@ class GuzzleHandler extends StreamHandler
 			foreach ((array) error_get_last() as $key => $value) {
 				$message .= "[{$key}] {$value} ";
 			}
-			throw new RingException(trim($message));
+			throw new \Exception(trim($message));
 		}
 
 		return $resource;
@@ -273,111 +271,6 @@ class GuzzleHandler extends StreamHandler
 		return $context;
 	}
 
-	private function add_proxy(array $request, &$options, $value, &$params)
-	{
-		if (!is_array($value)) {
-			$options['http']['proxy'] = $value;
-		} else {
-			$scheme = isset($request['scheme']) ? $request['scheme'] : 'http';
-			if (isset($value[$scheme])) {
-				$options['http']['proxy'] = $value[$scheme];
-			}
-		}
-	}
-
-	private function add_timeout(array $request, &$options, $value, &$params)
-	{
-		$options['http']['timeout'] = $value;
-	}
-
-	private function add_verify(array $request, &$options, $value, &$params)
-	{
-		if ($value === true) {
-			// PHP 5.6 or greater will find the system cert by default. When
-			// < 5.6, use the Guzzle bundled cacert.
-			if (PHP_VERSION_ID < 50600) {
-				$options['ssl']['cafile'] = ClientUtils::getDefaultCaBundle();
-			}
-		} elseif (is_string($value)) {
-			$options['ssl']['cafile'] = $value;
-			if (!file_exists($value)) {
-				throw new RingException("SSL CA bundle not found: $value");
-			}
-		} elseif ($value === false) {
-			$options['ssl']['verify_peer'] = false;
-			return;
-		} else {
-			throw new RingException('Invalid verify request option');
-		}
-
-		$options['ssl']['verify_peer'] = true;
-		$options['ssl']['allow_self_signed'] = true;
-	}
-
-	private function add_cert(array $request, &$options, $value, &$params)
-	{
-		if (is_array($value)) {
-			$options['ssl']['passphrase'] = $value[1];
-			$value = $value[0];
-		}
-
-		if (!file_exists($value)) {
-			throw new RingException("SSL certificate not found: {$value}");
-		}
-
-		$options['ssl']['local_cert'] = $value;
-	}
-
-	private function add_progress(array $request, &$options, $value, &$params)
-	{
-		$fn = function ($code, $_, $_, $_, $transferred, $total) use ($value) {
-			if ($code == STREAM_NOTIFY_PROGRESS) {
-				$value($total, $transferred, null, null);
-			}
-		};
-
-		// Wrap the existing function if needed.
-		$params['notification'] = isset($params['notification'])
-			? Core::callArray([$params['notification'], $fn])
-			: $fn;
-	}
-
-	private function add_debug(array $request, &$options, $value, &$params)
-	{
-		static $map = [
-			STREAM_NOTIFY_CONNECT       => 'CONNECT',
-			STREAM_NOTIFY_AUTH_REQUIRED => 'AUTH_REQUIRED',
-			STREAM_NOTIFY_AUTH_RESULT   => 'AUTH_RESULT',
-			STREAM_NOTIFY_MIME_TYPE_IS  => 'MIME_TYPE_IS',
-			STREAM_NOTIFY_FILE_SIZE_IS  => 'FILE_SIZE_IS',
-			STREAM_NOTIFY_REDIRECTED    => 'REDIRECTED',
-			STREAM_NOTIFY_PROGRESS      => 'PROGRESS',
-			STREAM_NOTIFY_FAILURE       => 'FAILURE',
-			STREAM_NOTIFY_COMPLETED     => 'COMPLETED',
-			STREAM_NOTIFY_RESOLVE       => 'RESOLVE',
-		];
-
-		static $args = ['severity', 'message', 'message_code',
-		                'bytes_transferred', 'bytes_max'];
-
-		$value = Core::getDebugResource($value);
-		$ident = $request['http_method'] . ' ' . Core::url($request);
-		$fn = function () use ($ident, $value, $map, $args) {
-			$passed = func_get_args();
-			$code = array_shift($passed);
-			fprintf($value, '<%s> [%s] ', $ident, $map[$code]);
-			foreach (array_filter($passed) as $i => $v) {
-				fwrite($value, $args[$i] . ': "' . $v . '" ');
-			}
-			fwrite($value, "\n");
-		};
-
-		// Wrap the existing function if needed.
-		$params['notification'] = isset($params['notification'])
-			? Core::callArray([$params['notification'], $fn])
-			: $fn;
-	}
-
 	private function applyCustomOptions(array $request, array &$options)
 	{
 		if (!isset($request['client']['stream_context'])) {
@@ -385,7 +278,7 @@ class GuzzleHandler extends StreamHandler
 		}
 
 		if (!is_array($request['client']['stream_context'])) {
-			throw new RingException('stream_context must be an array');
+			throw new \Exception('stream_context must be an array');
 		}
 
 		$options = array_replace_recursive(

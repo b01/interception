@@ -201,28 +201,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\fopen( 'http://www.example.com/', 'r' );
 	}
 
-	public function test_setting_request_headers()
-	{
-		// The test works but you have to manually start the PHP web server before you run it.
-		$this->markTestIncomplete( 'Build a windows batch script to start/stop the PHP built-in server without it blocking this process.' );
-		$params = 'test=1234';
-		Http::setSaveFilename( 'ignore-headers-set' );
-		$context = \stream_context_create([
-			'http' => [
-				'method' => 'POST',
-		        'header' => \implode("\r\n", [
-			        'content-type: application/x-www-form-urlencoded',
-			        'content-length: ' . strlen( $params ),
-			        'TEST: 4321',
-		        ]) . "\r\n",
-		        'content' => 'test=1234'
-			]
-		]);
-		$connection = \fopen( 'http://localhost:9876/test.php', 'r', FALSE, $context );
-		$content = \fread( $connection, 8000 );
-		$this->assertContains( '1234', $content );
-	}
-
 	/**
 	 * When there are no headers, we will get stuck in stream_open, due to the while loop in populateResponseHeaders()
 	 */

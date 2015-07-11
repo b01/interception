@@ -35,16 +35,16 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		Http::persistSaveFile( $filename );
 		$streamHandler = new GuzzleHandler();
 		// Make the request.
-		$streamHandler(array(
+		$streamHandler([
 			'http_method' => 'GET',
 			'scheme' => 'http',
 			'uri' => '/',
-			'headers' => array( 'Host' => array('www.example.com') ),
-			'client' => array(
+			'headers' => [ 'Host' => ['www.example.com'] ],
+			'client' => [
 				// Turn SSL verify off, on by default.
 				'verify' => FALSE,
-			)
-		));
+			]
+		]);
 		Http::clearPersistSaveFile();
 		// Verify the request was recorded.
 		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '-1.rsd' );
@@ -61,16 +61,16 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		$filename = 'ignore-guzzle-test';
 		Http::persistSaveFile( $filename );
 		// Force Guzzle to use a PHP stream instead of cURL.
-		$httpClient = new Client(array(
+		$httpClient = new Client([
 			'handler' => $streamHandler
-		));
+		]);
 
 		$httpClient->get(
 			'http://www.example.com/',
-			array(
+			[
 				'version' => '1.0',
 				'verify' => FALSE,
-			)
+			]
 		);
 		Http::clearPersistSaveFile();
 		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '-1.rsd' );
