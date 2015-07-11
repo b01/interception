@@ -11,6 +11,9 @@ use Kshabazz\Interception\StreamWrappers\Http;
  */
 class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implements \PHPUnit_Framework_TestListener
 {
+	const
+		STREAM_WRAPPER_NAME_SPACE = '\\Kshabazz\\Interception\\StreamWrappers\\';
+
 	private
 		/** @var string Save directory. */
 		$saveDir,
@@ -21,35 +24,45 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 
 	/**
 	 * @param string $pWrapperClass Interception stream wrapper to register.
-	 * @param string $pSaveDir Directory where RSD files will be saved.
+	 * @param string $pSaveDir A directory that exists, can also be a constant set to a directory.
+	 *                         This is where RSD files will be saved.
 	 * @throws InterceptionException
 	 */
 	public function __construct( $pWrapperClass, $pSaveDir = NULL, array $pWrappers = NULL )
 	{
-		if ( empty($pWrapperClass) )
+		$wrapperClass = self::STREAM_WRAPPER_NAME_SPACE . $pWrapperClass;
+
+		if ( empty($pWrapperClass) || !class_exists($wrapperClass) )
 		{
-			throw new InterceptionException(
-				'You must set the stream wrapper class as the first argument, leave out the namespace.'
-			);
+			throw new InterceptionException( InterceptionException::BAD_STREAM_WRAPPER );
 		}
-		if ( !\is_dir($pSaveDir) && strcmp($pSaveDir, 'FIXTURES_PATH') !== 0 )
+
+		// Use a directory that exists or a constant that is defined to a directory that exists.
+		if ( !\is_dir($pSaveDir) )
 		{
-			throw new InterceptionException(
-				'You must set the directory where to save files as the second argument.'
-			);
+			if ( defined($pSaveDir) )
+			{
+				// When path is stored in constant.
+				$pSaveDir = constant( $pSaveDir );
+				if ( !\is_dir( $pSaveDir ) )
+				{
+					throw new InterceptionException( InterceptionException::BAD_SAVE_CONST, [$pSaveDir] );
+				}
+			}
+			else
+			{
+				throw new InterceptionException( InterceptionException::BAD_SAVE_DIR );
+			}
 		}
+
 		$this->wrapperClass = $pWrapperClass;
 		$this->wrappers = $pWrappers;
-		// Substitute FIXTURES_PATH it with constant value.
-		$this->saveDir = \str_replace(
-			'FIXTURES_PATH', constant('FIXTURES_PATH'), $pSaveDir
-		);
+		$this->saveDir = $pSaveDir;
 
 		// Set which wrapper to replace if not specified.
 		if ( $this->wrappers === NULL ) {
-			$this->wrappers = array( strtolower($this->wrapperClass) );
+			$this->wrappers = [ strtolower($this->wrapperClass) ];
 		}
-
 	}
 
 	/**
@@ -62,7 +75,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 	{
 		foreach ( $this->wrappers as $wrapper )
 		{
-			\stream_wrapper_restore( 'http' );
+			\stream_wrapper_restore( $wrapper );
 		}
 		return TRUE;
 	}
@@ -91,7 +104,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener implement
 			\stream_wrapper_unregister( $wrapper );
 			\stream_register_wrapper(
 				$wrapper,
-				'\\Kshabazz\\Interception\\StreamWrappers\\' . $this->wrapperClass,
+				self::STREAM_WRAPPER_NAME_SPACE . $this->wrapperClass,
 				\STREAM_IS_URL
 			);
 		}

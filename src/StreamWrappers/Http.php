@@ -544,7 +544,7 @@ class Http implements \ArrayAccess, \Countable
 		// When not set.
 		if ( empty($filename) )
 		{
-			throw new InterceptionException( 'Please set a filename to save the contents of the request' );
+			throw new InterceptionException( InterceptionException::NO_FILENAME );
 		}
 		$ext = '.rsd';
 

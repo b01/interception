@@ -116,8 +116,11 @@ In your PHP Unit configuration file, add the listener like so:
     <listeners>
         <listener class="\Kshabazz\Interception\InterceptionListener">
             <arguments>
+                <!-- The first parameter must be the Interception class that will handle to protocol. -->
                 <string>Http</string>
+                <!-- The second parameter can be a path or a constant that is set to a path. -->
                 <string>FIXTURES_PATH</string>
+                <!-- The third parameter should list the protocols to handle. -->
                 <array>
                     <element>
                         <string>http</string>

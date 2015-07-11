@@ -30,7 +30,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_no_stream_wrapper_class()
 	{
-		( new InterceptionListener(NULL, FIXTURES_PATH) );
+		( new InterceptionListener(NULL, NULL) );
 	}
 
 	public function test_tearDown()
@@ -42,7 +42,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException \Kshabazz\Interception\InterceptionException
-	 * @expectedExceptionMessage You must set the directory where to save files as the second argument
+	 * @expectedExceptionMessage Second argument must be a directory where to save RSD files
 	 */
 	public function test_setting_save_invlaid_directory()
 	{
