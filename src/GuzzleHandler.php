@@ -24,12 +24,9 @@
  * }
  */
 
-use GuzzleHttp\Ring\Client\ClientUtils;
 use GuzzleHttp\Ring\Core;
-use GuzzleHttp\Ring\Exception\ConnectException;
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
 use GuzzleHttp\Stream\InflateStream;
-use GuzzleHttp\Stream\StreamInterface;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\Utils;
 
@@ -69,7 +66,7 @@ class GuzzleHandler
 		$response = [
 			'status'         => $parts[1],
 			'reason'         => isset($parts[2]) ? $parts[2] : null,
-			'headers'        => Core::headersFromLines($hdrs),
+			'headers'        => self::headersFromLines($hdrs),
 			'effective_url'  => $url,
 		];
 
@@ -127,7 +124,7 @@ class GuzzleHandler
 
 		// Stream the response into the destination stream
 		$dest = is_string($dest)
-			? new Stream(Utils::open($dest, 'r+'))
+			? new Stream(fopen($dest, 'r+'))
 			: Stream::factory($dest);
 
 		Utils::copyToStream($stream, $dest);
@@ -154,7 +151,7 @@ class GuzzleHandler
 		if (strpos($message, 'getaddrinfo') // DNS lookup failed
 			|| strpos($message, 'Connection refused')
 		) {
-			$e = new ConnectException($e->getMessage(), 0, $e);
+			$e = new \Exception($e->getMessage(), 0, $e);
 		}
 
 		return [
@@ -207,7 +204,7 @@ class GuzzleHandler
 		// HTTP/1.1 streams using the PHP stream wrapper require a
 		// Connection: close header
 		if ((!isset($request['version']) || $request['version'] == '1.1')
-			&& !Core::hasHeader($request, 'Connection')
+			&& !self::hasHeader($request, 'Connection')
 		) {
 			$request['headers']['Connection'] = ['close'];
 		}
@@ -261,7 +258,7 @@ class GuzzleHandler
 		if (isset($body)) {
 			$context['http']['content'] = $body;
 			// Prevent the HTTP handler from adding a Content-Type header.
-			if (!Core::hasHeader($request, 'Content-Type')) {
+			if (!self::hasHeader($request, 'Content-Type')) {
 				$context['http']['header'] .= "Content-Type:\r\n";
 			}
 		}
@@ -327,5 +324,47 @@ class GuzzleHandler
 			$request,
 			$options
 		);
+	}
+
+	/**
+	 * Returns true if a message has the provided case-insensitive header.
+	 *
+	 * @param array  $message Request or response hash.
+	 * @param string $header  Header to check
+	 *
+	 * @return bool
+	 */
+	public static function hasHeader($message, $header)
+	{
+		if (!empty($message['headers'])) {
+			foreach ($message['headers'] as $name => $value) {
+				if (!strcasecmp($name, $header)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Parses an array of header lines into an associative array of headers.
+	 *
+	 * @param array $lines Header lines array of strings in the following
+	 *                     format: "Name: Value"
+	 * @return array
+	 */
+	public static function headersFromLines($lines)
+	{
+		$headers = [];
+
+		foreach ($lines as $line) {
+			$parts = explode(':', $line, 2);
+			$headers[trim($parts[0])][] = isset($parts[1])
+				? trim($parts[1])
+				: null;
+		}
+
+		return $headers;
 	}
 }
