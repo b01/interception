@@ -2,6 +2,12 @@
 
 use \Kshabazz\Interception\StreamWrappers\Http;
 
+/**
+ * Class HttpTest
+ *
+ * @package Kshabazz\Tests\Interception\StreamWrappers
+ * @coversDefaultClass \Kshabazz\Interception\StreamWrappers\Http
+ */
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
 	static public function setUpBeforeClass()
@@ -33,6 +39,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 		\array_map( 'unlink', $removeFiles );
 	}
 
+	/**
+	 * @covers ::setSaveFilename
+	 * @covers ::stream_close
+	 */
 	public function test_http_interception_of_fopen_using_tcp()
 	{
 		$filename = 'ignore-www-example-com-fopen';

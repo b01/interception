@@ -1,0 +1,443 @@
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=UTF-8
+Last-Modified: Fri, 10 Jul 2015 19:13:52 GMT
+Pragma: no-cache
+Server: Apache/2.4.6 (Red Hat) PHP/5.5.22
+X-Pingback: http://www.quickenloans.com/blog/xmlrpc.php
+X-Powered-By: W3 Total Cache/0.9.4
+X-Robots-Tag: noindex,follow
+Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0
+Expires: Sat, 11 Jul 2015 23:29:00 GMT
+Date: Sat, 11 Jul 2015 23:29:00 GMT
+Transfer-Encoding:  chunked
+Connection: close
+Connection: Transfer-Encoding
+Set-Cookie: PHPSESSID=2lglsdp8r9n7fjpug4h54uva93; path=/
+
+
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:media="http://search.yahoo.com/mrss">
+
+<channel>
+	<title>ZING Blog by Quicken Loans &#187; Mortgage Basics</title>
+	<atom:link href="http://www.quickenloans.com/blog/category/mortgage/mortgage-basics/feed" rel="self" type="application/rss+xml" />
+	<link>http://www.quickenloans.com/blog</link>
+	<description>Amazing Insights on Home, Money and Life</description>
+	<lastBuildDate>Fri, 10 Jul 2015 19:13:52 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.2.1</generator>
+	<item>
+		<title>Closing Costs: What They Are and How to Keep Them Under Control</title>
+		<link>http://www.quickenloans.com/blog/closing-costs-what-they-are-and-how-to-keep-them-under-control</link>
+		<comments>http://www.quickenloans.com/blog/closing-costs-what-they-are-and-how-to-keep-them-under-control#comments</comments>
+		<pubDate>Wed, 08 Jul 2015 20:51:33 +0000</pubDate>
+		<dc:creator><![CDATA[Kevin Graham]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Closing Costs]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=63586</guid>
+		<description><![CDATA[<p>What goes into your closing costs? How do you keep them under control so you have enough money to seal the deal and finalize the loan? You’ve got the questions; we’ve got the answers.</p><p>The post <a href="http://www.quickenloans.com/blog/closing-costs-what-they-are-and-how-to-keep-them-under-control">Closing Costs: What They Are and How to Keep Them Under Control</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/HiRes-e1436388074989.jpg"><img class="alignleft  wp-image-63582" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/HiRes-e1436388074989.jpg" alt="HiRes" width="334" height="191" /></a>You’ve gone all the way through the mortgage process and it’s time to close your loan. What are all these closing costs and why do they change?</p>
+<p>And we get it. Closing costs are a turnoff. If everyone had a bunch of money to bring to the table, we wouldn’t need mortgages. What can you do to help keep the costs down? We have some tips.</p>
+<h2>What Goes into Your Closing Costs?</h2>
+<p>When you close your loan, you often have to bring a certain amount of money to the table. Here are some of the variety of things this <a href="http://www.quickenloans.com/blog/closing-costs-and-fees-explained" target="_blank">payment at closing</a> covers:</p>
+<ul>
+<li>Taxes and homeowners insurance paid into an escrow account</li>
+<li>Interest points purchased to bring down your rate</li>
+<li>Title transfer fees</li>
+<li>Additional appraisal costs, i.e., a property survey</li>
+<li>Homeowners association dues</li>
+<li>Real estathete agent fees</li>
+</ul>
+<h2>Why Do They Change?</h2>
+<p>When you apply for your loan, you get what’s called a Loan Estimate (also known as a <a href="http://www.quickenloans.com/blog/understanding-the-good-faith-estimate-gfe" target="_blank">Good Faith Estimate or GFE</a>). Unfortunately, it’s just that, an estimate. Lender fees and rates are pretty tightly controlled in terms of how much they can change between the GFE and closing. However, third-party fees, including appraisal, home inspection and tax certification can go up as much as 10%.</p>
+<p>A tricky issue can arise in a refinance scenario. If your appraisal comes in lower than expected, your loan-to-value (LTV) ratio may be higher. A change in your LTV could mean you have to pay more in prepaid interest points at closing in order to get a certain interest rate.</p>
+<p>The amount for the tax certification or the amount needed in prepaid escrow could also change and cause upfront costs to push up. If there are any homeowners association dues, a lender wouldn’t necessarily know about those until it got closer to closing time.</p>
+<h2>How Can You Keep Closing Costs Down?</h2>
+<p>What can you do if you still want to close the loan, but costs are becoming prohibitively expensive? You have a few options here.</p>
+<p>You could negotiate concessions from the seller into the deal that would help pay for closing. A seller that’s looking to offload the property may be open to some give-and-take.</p>
+<p>In a modification of this strategy, you could negotiate seller’s concessions in exchange for paying a higher price for the home. You would effectively be rolling your closing costs into the mortgage amount to be paid off over the life of the loan instead of worrying about it upfront.</p>
+<p>Finally, taking a slightly higher rate may allow your lender to give you credits to cover part or all of your closing cost. Doing this would allow you to still close the loan without having to spend so much money up front.</p>
+<p>That about closes out this article on closing costs. Still got questions? Leave us a note in the comments.</p>
+<p>The post <a href="http://www.quickenloans.com/blog/closing-costs-what-they-are-and-how-to-keep-them-under-control">Closing Costs: What They Are and How to Keep Them Under Control</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/closing-costs-what-they-are-and-how-to-keep-them-under-control/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/HiRes-e1436388074989.jpg" width="1080" height="617"/></media:group>	</item>
+		<item>
+		<title>Everything Mortgage Clients Need to Know About Getting a Revision Request</title>
+		<link>http://www.quickenloans.com/blog/everything-mortgage-clients-need-to-know-about-getting-a-revision-request</link>
+		<comments>http://www.quickenloans.com/blog/everything-mortgage-clients-need-to-know-about-getting-a-revision-request#comments</comments>
+		<pubDate>Wed, 01 Jul 2015 17:14:02 +0000</pubDate>
+		<dc:creator><![CDATA[Jeff Keller]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Mortgage Documents]]></category>
+		<category><![CDATA[Mortgage Process]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=63492</guid>
+		<description><![CDATA[<p>Learn what a revision request is and how to handle it if you receive on during your mortgage process.</p><p>The post <a href="http://www.quickenloans.com/blog/everything-mortgage-clients-need-to-know-about-getting-a-revision-request">Everything Mortgage Clients Need to Know About Getting a Revision Request</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/revision-request-e1435770408457.jpg"><img class="alignleft  wp-image-63493" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/revision-request-e1435770408457.jpg" alt="revision request" width="398" height="398" /></a>So you’re heading through your mortgage process like a knife through hot butter … or wait, is it a hot knife through butter? Either way, the bottom line is that things are going great and in no time you’ll be at the closing table of your refinance or purchase loan. Awesome!</p>
+<p>But then, [RECORD SCRATCH], you receive a revision request from us. “Wait a minute,” you say. “What is this revision request thing? I’ve provided everything Quicken Loans has asked for. I’ve uploaded all my documents to MyQL. What’s going on here?”</p>
+<p>Jason Greenwald, Quicken Loans Operations Director, says that getting a revision request is very common and nothing to be concerned about. “A revision request is simply a way for us to communicate with a client and let them know that we just need some additional information. When a client fulfills a revision request from us, it means that their loan will generally move along more smoothly and accurately, leading to a quicker closing.”</p>
+<p>At Quicken Loans, we do everything possible to make the mortgage process easy for our clients. However, a home loan is still a fairly complex financial transaction. And a lot of important, accurate client information is necessary and needs to be verified. So, let’s say you fax a document to us that comes through blurry or off center, we may need to send you a revision request to resubmit it so we can read it accurately. Or, maybe the final page of a bank statement was inadvertently left off an uploaded PDF. Again, we may need to send you a revision request so we can have all that documentation to make sure your loan is complete.</p>
+<p>According to Greenwald, “Our goal is the same as that of our clients – to get them to a smooth closing. We don’t want to make their process more difficult. It’s just very important to us that their documentation is as thorough as possible.”</p>
+<p>So if you happen to receive a revision request from us, don’t sweat it. Just know that taking the few minutes to provide us with the information we need is going to make your mortgage process less complicated and quicker in the long run!</p>
+<p>The post <a href="http://www.quickenloans.com/blog/everything-mortgage-clients-need-to-know-about-getting-a-revision-request">Everything Mortgage Clients Need to Know About Getting a Revision Request</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/everything-mortgage-clients-need-to-know-about-getting-a-revision-request/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/07/revision-request-e1435770408457.jpg" width="1080" height="1080"/></media:group>	</item>
+		<item>
+		<title>How U.S. Monetary Policy Influences Mortgage Rates</title>
+		<link>http://www.quickenloans.com/blog/how-u-s-monetary-policy-influences-mortgage-rates</link>
+		<comments>http://www.quickenloans.com/blog/how-u-s-monetary-policy-influences-mortgage-rates#comments</comments>
+		<pubDate>Fri, 29 May 2015 18:30:19 +0000</pubDate>
+		<dc:creator><![CDATA[Kevin Graham]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[fiscal policy]]></category>
+		<category><![CDATA[Mortgage Rates]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=63115</guid>
+		<description><![CDATA[<p>It can be tempting to think of the mortgage interest rate as a number your lender pulls out of thin air. We hear on a regular basis that rates are trending up or down, but what influences these trends and what role does the government play in shaping them?</p><p>The post <a href="http://www.quickenloans.com/blog/how-u-s-monetary-policy-influences-mortgage-rates">How U.S. Monetary Policy Influences Mortgage Rates</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/fiscal-policy.png"><img class="alignleft  wp-image-63116" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/fiscal-policy.png" alt="American Flag" width="395" height="245" /></a>“Mortgage rates are at near-historic lows.” “Lock now before the Fed raises interest rates.” If you’re in the market for a mortgage, you may be hearing these messages often with little or no idea how these rates are set. As far as you’re concerned, your lender could be pulling these numbers out of thin air.</p>
+<p>Trust me, these numbers are based on very real economic factors, most notably movements in the bond market. Movements in bonds are affected by the state of the economy, events around the globe and – when it wants to get involved – the U.S. government.</p>
+<p>What’s that? You want a little more than my word for it? In order to see how these things interact, you need to understand a little bit about economics and a little bit about how the sausage is made in the mortgage business.</p>
+<p>Let’s take the mortgage piece first.</p>
+<h2>A (Short) Primer on the Mortgage Business</h2>
+<p>Let’s imagine for a moment that Jane Smith has just closed on a 30-year fixed-rate loan. Most lenders don’t hold on to your loan for 30 years. Lenders need new capital in order to make new loans to incoming clients. They can’t wait for several years of payments to come in, so they’ll often sell your loan on a secondary market.</p>
+<p>Here’s how it works:</p>
+<p>Your loan is usually insured by a government-sponsored enterprise (GSE) like Fannie Mae or Freddie Mac. In the case of FHA and VA loans, the insurance is provided through departments run by the U.S. government. The insurers assume the risk should you default on your loan. This insurance enables liquidity in the bond market, allowing loans to be bought and sold as mortgage-backed securities (MBS) by anyone without the exposure to risk that comes with potential foreclosures. Each of these agencies have very specific requirements for the types of loans they will insure. This is why you see variation in things like the credit score and amount of down payment required to qualify for a specific loan type.</p>
+<p>The agencies then turn around and package the <a href="http://www.fanniemae.com/resources/file/mbs/pdf/basics-sf-mbs.pdf" target="_blank" rel="nofollow">individual loans into MBS</a> that are sold to investors in the bond market. The MBS are made up of similar loans. For example, Jane Smith’s loan might be included in a group with 10 other loans that are all 30-year fixed-rate mortgages taken out by clients with 720+ credit scores. The MBS are then sold to interested investors in the bond markets. It’s this interaction in the markets that enables the governments (both here and abroad) to influence rates.</p>
+<h2>Bond basics</h2>
+<p>The <a href="http://www.ianfleming.com/ian-fleming/ian-fleming-inside/literary-career-1952-1964/" target="_blank" rel="nofollow">character of James Bond</a> first appeared in Ian Fleming’s 1953 novel “Casino Royale.” Since then, his adventures have spawned numerous books and Hollywood adaptations starring Sean Connery, Pierce Brosnan and Daniel – oh, wrong bond.</p>
+<p>People buy (investment) bonds because, unlike stocks, you know what your return is going to be at the end of the term rather than living at the mercy of day-to-day fluctuations in the stock market. How good the return is will depend upon how much you paid for the bond, but (assuming complete financial collapse is avoided) you will get something back out of it.</p>
+<h2>“From Russia with Love”: Global Impact of Bond Markets</h2>
+<p>Bond markets and, in turn, mortgage rates are affected by events taking place all over the world. Earlier this year crude oil prices <a href="http://www.nasdaq.com/markets/crude-oil.aspx?timeframe=6m" target="_blank" rel="nofollow">were in a bit of a freefall</a> due to large amounts of oil flooding the market. This caused investors to sell off some of their investments in oil companies and reinvest in the U. S. bond market, which is considered something of a safe haven. One particular source of this bond market love was investors <a href="http://www.nytimes.com/2014/12/24/business/international/as-ruble-falters-russia-forces-exporters-to-reduce-foreign-currency.html?_r=0" target="_blank" rel="nofollow">who were fleeing Russian investments</a> in the face of a collapsing ruble due in part to low oil prices.</p>
+<p>This caused the 10-year treasury, a key predictor of U.S. mortgage rates to lower its yield, or promised return. The yield drops when it doesn’t have to be so high in order to get people to buy. The <a href="http://www.quickenloans.com/blog/know-your-rate-how-oil-prices-affect-mortgage-rates">drop in oil prices</a> actually caused mortgage rates in the U.S. to fall quite a bit during this period.</p>
+<h2>How Governments Can Influence Mortgage Rates</h2>
+<p>Governments have two different types of policy tools they can use as jumper cables to kick-start an economy: fiscal policy and monetary policy. Monetary policy has the impact on mortgage rates. The difference between the two can often be confusing though, so it might help to take a moment and explain.</p>
+<h3>Fiscal Policy vs. Monetary Policy</h3>
+<p>When economists refer to fiscal policy, they mean the things the government can do in terms of spending to help the economy. Fiscal policy manifests itself in two ways. In the first, the government can lower taxes in order to encourage citizens to invest the money they save on taxes on goods and services. In the second strategy, the government can increase its own spending on goods and services. The hope here is that businesses will hire more workers in order to keep up with the increased orders from the government.</p>
+<p>Monetary policy, on the other hand, refers to the ability of the government to influence and shoot straight through its control of the money supply. By putting more money in the market, central banks (like the Federal Reserve in the U.S.) lower interest rates because the cost of obtaining money is cheaper. This encourages investment. Removing money from the market makes interest rates go up, encouraging people to save.</p>
+<h3>Lowering Interest Rates</h3>
+<p>If the Federal Reserve feels that interest rates have become high enough that people don’t want to borrow money for investment in the economy, it can lower the rate it charges banks to get money. The idea is that the savings are passed on to the bank’s borrowers in the form of lower interest rates. This should boost borrowing and get the economy going.</p>
+<p>What happens when bringing rates as low as possible, effectively zero for banks, doesn’t get things moving along as well as the Fed would like?</p>
+<h3>A Little Help from Q(E)</h3>
+<p>When James Bond is in a tight spot, he can always rely on a gadget from Q to get him out of trouble. When the Federal Reserve was unhappy with the way the economy was working in 2008–09, it turned to QE.</p>
+<p>QE stands for <a href="http://www.economist.com/blogs/economist-explains/2015/03/economist-explains-5" target="_blank" rel="nofollow">quantitative easing</a> and it works like this. The government introduces new money into the markets by buying various bonds. The goal is that banks take the money earned from the sale of these bonds to the Federal Reserve and use it to make new loans, further lowering interest rates.</p>
+<p>One type of bond that the government has bought a lot of during its QE period is MBS. With so much more MBS being bought up, the offered yield doesn’t have to be as high and mortgage rates go down. One strong predictor of mortgage rates is the <a href="http://data.cnbc.com/quotes/US10Y" target="_blank" rel="nofollow">10-year U.S. Treasury yield</a>. When the bond yield for this treasury is down, rates are down and vice versa.</p>
+<p>I’ve included the visual below so you can see the effect that the U.S. QE program has had on mortgage rates.</p>
+<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/W-Zing-QuantitativeGraph-20150515.png"><img class="aligncenter size-large wp-image-63118" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/W-Zing-QuantitativeGraph-20150515-1024x624.png" alt="graph" width="980" height="597" /></a></p>
+<p>Since the program <a href="http://www.bloombergview.com/quicktake/federal-reserve-quantitative-easing-tape" target="_blank" rel="nofollow">ended in October 2014</a>, the Fed has kept short-term interest rates near zero, although that’s expected to change later this year. When the rise hits, mortgage rates will go up.</p>
+<p>It’s important to note that the mortgage rate being referred to here is only the absolute baseline rate you could get. Your personal rate would depend on factors such as the type of loan, your down payment, your credit score and the number of prepaid interest points you pay.</p>
+<p>That concludes today’s lesson on how mortgage rates are set. Don’t worry! There’s no quiz. If you have a question, you don’t even have to wait for my office hours. Just leave us a note in the comments!</p>
+<p>The post <a href="http://www.quickenloans.com/blog/how-u-s-monetary-policy-influences-mortgage-rates">How U.S. Monetary Policy Influences Mortgage Rates</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/how-u-s-monetary-policy-influences-mortgage-rates/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/fiscal-policy.png" width="1015" height="630"/></media:group>	</item>
+		<item>
+		<title>Could an FHA Loan Be Right for You?</title>
+		<link>http://www.quickenloans.com/blog/could-an-fha-loan-be-right-for-you</link>
+		<comments>http://www.quickenloans.com/blog/could-an-fha-loan-be-right-for-you#comments</comments>
+		<pubDate>Mon, 18 May 2015 19:47:41 +0000</pubDate>
+		<dc:creator><![CDATA[Patrick Chism]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[FHA Loan]]></category>
+		<category><![CDATA[Zing Education Series]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62996</guid>
+		<description><![CDATA[<p>A Federal Housing Administration (FHA) loan provides many benefits for home buyers and those who are trying to refinance. Let’s take a minute to better understand the particulars of this government-insured program to see if it’s the right decision for you.</p><p>The post <a href="http://www.quickenloans.com/blog/could-an-fha-loan-be-right-for-you">Could an FHA Loan Be Right for You?</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/mrlbxma75p" name="wistia_embed" width="615" height="346" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe><script src="//fast.wistia.net/assets/external/E-v1.js" async=""></script></p>
+<p style="text-align: left;">While purchasing or refinancing a home can feel like a challenge, there are some options that can help you make the most of one of life’s biggest investments. A <a href="http://www.quickenloans.com/home-loans/fha-loan" target="_blank">Federal Housing Administration (FHA) loan</a>, which is insured by the U.S. government, makes it easier for people to purchase or refinance their homes. Not only do FHA loans offer a lower down payment and low equity refinances, this program also makes it easier for people with less-than-perfect credit to get approved. Let’s take a look at the specific advantages of an FHA loan so you can decide if it’s the right decision for you.</p>
+<h2>Credit Score</h2>
+<p>A low credit score could get between you and your new home, but FHA loans allow people with credit scores as low as 580 to receive financing. With these lower credit requirements, it’s much easier to purchase or refinance.</p>
+<h2>FHA Purchase</h2>
+<p>FHA loans only require a 3.5% down payment, and they’re offered as both fixed and <a href="http://www.quickenloans.com/blog/understanding-adjustable-rate-mortgages-arms" target="_blank">adjustable rate mortgages</a> (ARMs). Fixed-rate FHA loans are available in 15-, 20-, 25- and 30-year terms, so there is a wide range of options for you to choose from. FHA loans are also available as a 5-year ARM, which will allow you to take advantage of lower 
+00006000
+interest rates.</p>
+<h2>FHA Refinance</h2>
+<p>If you previously purchased a home with a hefty interest rate, refinancing could help you. With FHA loans, you can refinance up to 97.75% of your home’s value, potentially giving you a more manageable monthly payment.</p>
+<h2>FHA Streamline Refinance</h2>
+<p>If you used an FHA loan to purchase your home, you might have the opportunity to take advantage of the FHA Streamline Refinance. Even if you owe more than your home is worth, you could potentially refinance to a lower interest rate and a lower monthly payment. The FHA Streamline Refinance program also allows homeowners a simplified application process, including lower credit requirements, no appraisal and less documentation. In other words, you’ll be able to refinance your loan faster than ever before.</p>
+<p>If you’d like to learn more about the many benefits of FHA loans, call 800-QUICKEN or leave your questions in the comment section below.</p>
+<p>The post <a href="http://www.quickenloans.com/blog/could-an-fha-loan-be-right-for-you">Could an FHA Loan Be Right for You?</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/could-an-fha-loan-be-right-for-you/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/Screen-Shot-2015-05-18-at-3.41.05-PM.png" width="446" height="341"/></media:group>	</item>
+		<item>
+		<title>The Benefits of the VA Home Loan</title>
+		<link>http://www.quickenloans.com/blog/the-benefits-of-the-va-home-loan</link>
+		<comments>http://www.quickenloans.com/blog/the-benefits-of-the-va-home-loan#comments</comments>
+		<pubDate>Wed, 13 May 2015 21:42:44 +0000</pubDate>
+		<dc:creator><![CDATA[Kevin Graham]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[VA Loan]]></category>
+		<category><![CDATA[VA Loan Benefits]]></category>
+		<category><![CDATA[Zing Education Series]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62964</guid>
+		<description><![CDATA[<p>The VA home loan program is a great benefit for veterans and eligible active duty service members serving our country at home and abroad. We put together a new video on the advantages of this great loan program.</p><p>The post <a href="http://www.quickenloans.com/blog/the-benefits-of-the-va-home-loan">The Benefits of the VA Home Loan</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/2lfydjw6zl" name="wistia_embed" width="615" height="346" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe><script src="//fast.wistia.net/assets/external/E-v1.js" async=""></script></p>
+<p>Since its inception in 1944, the VA home loan has been used by more than 20 million Americans to get a mortgage. This program has some great advantages, and we’ve put together a video to highlight them.</p>
+<h2>VA Home Loan Basics</h2>
+<p>Insured by the Department of Veterans Affairs (VA), VA home loans are available to our nation’s military vets, eligible active duty service members and qualified surviving spouses.</p>
+<p>The program is very attractive for several reasons.</p>
+<p>To begin with, there’s a great deal of flexibility. You can get a VA-backed fixed-rate mortgage with a term of 15, 20 or 30 years. If you don’t plan on being in a house for very long, the VA also offers a 5-year ARM that might be right for you.</p>
+<p>VA loans are the only program that doesn’t require a down payment. This can save you money upfront. And whether you put down 1% or 20%, you won’t have to pay private mortgage insurance on your VA loan. This can save you thousands over the life of the loan.</p>
+<p>Under the VA program, you can refinance up to 120% of your home’s value. That could mean extra money in your pocket to put toward home improvements, a college education or whatever you choose. The VA also offers a streamline refinance program, which means there’s less hassle with documentation than on a comparable conventional loan.</p>
+<h2>How Do I Qualify?</h2>
+<p>There are some things you should know when getting qualified for a VA loan:</p>
+<ul>
+<li>You have to use a VA-approved lender.</li>
+<li>You must meet <a href="http://www.benefits.va.gov/homeloans/purchaseco_eligibility.asp" target="_blank" rel="nofollow">military requirements for eligibility</a>.</li>
+<li>Your lender will need a copy of your DD 214 document from the military.</li>
+<li>You’ll need to obtain a certificate of eligibility from the VA.</li>
+<li>Your credit score must be 620 or higher to qualify for the program.</li>
+</ul>
+<p>If you have any questions about these requirements, our Home Loan Experts can walk you through them. For more information on the VA home loan program, check out this <a href="http://www.quickenloans.com/blog/lessons-learned-about-va-loans" target="_blank">blog post on common misconceptions</a> about VA loans.</p>
+<p>The post <a href="http://www.quickenloans.com/blog/the-benefits-of-the-va-home-loan">The Benefits of the VA Home Loan</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/the-benefits-of-the-va-home-loan/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/VA-Loan.png" width="523" height="343"/></media:group>	</item>
+		<item>
+		<title>Video: The Difference Between Mortgage Rates and APR</title>
+		<link>http://www.quickenloans.com/blog/video-the-difference-between-mortgage-rates-and-apr</link>
+		<comments>http://www.quickenloans.com/blog/video-the-difference-between-mortgage-rates-and-apr#comments</comments>
+		<pubDate>Tue, 05 May 2015 15:07:01 +0000</pubDate>
+		<dc:creator><![CDATA[Kevin Graham]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Interest Rate v APR]]></category>
+		<category><![CDATA[Zing Education Series]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62853</guid>
+		<description><![CDATA[<p>One potentially confusing aspect of rate shopping for mortgages is that you’re actually looking at two different rates: the interest rate and something called the APR. What gives? Quicken Loans Home Loan Expert Kevin Ruzylo lays out the difference for you.</p><p>The post <a href="http://www.quickenloans.com/blog/video-the-difference-between-mortgage-rates-and-apr">Video: The Difference Between Mortgage Rates and APR</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/ocf2fck636" name="wistia_embed" width="615" height="346" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe></p>
+<p>&nbsp;</p>
+<p>Whether you’re shopping around for the best mortgage terms or just trying to see what rates look like, one particular aspect might be a little confusing. There are two different percentages to look at. What’s the deal with that?</p>
+<p>Quicken Loans Home Loan Expert Kevin Ruzylo dropped in to explain the difference between a mortgage interest rate and annual percentage rate (APR) in the video above.</p>
+<h2>Breaking It Down</h2>
+<p>In order to simplify this, let’s take a look at what a rate might look like when you’re shopping around.</p>
+<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/Rate-APR.png"><img class="  wp-image-62855 alignleft" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/Rate-APR.png" alt="Rate &amp; APR" width="358" height="278" /></a></p>
+<p>The interest rate (the lower of the two) is the amount of interest a lender or bank will charge you in order to get a mortgage. This is more than likely the rate people are referencing when they say things like, “Rates dropped below 4% this week.”</p>
+<p>The higher rate that’s listed is the APR. You can think of the APR as the “all in” rate. It encompasses not only your interest rate, but also other costs associated with getting your loan (e.g. closing costs). This annual rate is determined by looking at the total cost over the life of the loan.</p>
+<p>A greater difference between the interest rate and the APR indicates a lender with higher costs, whereas a lower difference means fewer costs built into the rate.</p>
+<p>One important point is to make sure that you’re comparing apples to apples. APR rate comparisons between 30-year-fixed mortgages and 5-year adjustable rates won’t necessarily be valid.</p>
+<p>I’ll let Kevin fill in the gaps. If you still have questions after watching the video, go ahead and ask them in the comments.</p>
+<p><script src="//fast.wistia.net/assets/external/E-v1.js" async="" type="mce-no/type"></script></p>
+<p>The post <a href="http://www.quickenloans.com/blog/video-the-difference-between-mortgage-rates-and-apr">Video: The Difference Between Mortgage Rates and APR</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/video-the-difference-between-mortgage-rates-and-apr/feed</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/05/Rate-v.-APR.png" width="613" height="343"/></media:group>	</item>
+		<item>
+		<title>Escrow: The One Word That Confuses Every Homeowner</title>
+		<link>http://www.quickenloans.com/blog/understanding-your-escrow-account</link>
+		<comments>http://www.quickenloans.com/blog/understanding-your-escrow-account#comments</comments>
+		<pubDate>Tue, 28 Apr 2015 20:48:40 +0000</pubDate>
+		<dc:creator><![CDATA[Amanda Pallay]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Escrow]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62791</guid>
+		<description><![CDATA[<p>Whether you’re a seasoned homeowner or a first-time home buyer, understanding how your escrow account works can be confusing. But really, it doesn’t have to be. I’ve taken the most important information and broken it down for you so when you’re facing your next escrow analysis, you won’t be freaked out.</p><p>The post <a href="http://www.quickenloans.com/blog/understanding-your-escrow-account">Escrow: The One Word That Confuses Every Homeowner</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/jade-house.jpg"><img class="alignleft  wp-image-62792" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/jade-house.jpg" alt="jade house" width="460" height="308" /></a>When I first bought my house, there were plenty of things I didn’t understand. Points? Amortization? No idea. I still struggle with those; I’m not going to lie. Escrow? Now, that was one I had heard about, and had some idea about what it could be, but it was confusing at best. It took a few years of fluctuating payments and a few surprise overpayment checks for me to really get a handle on understanding my escrow account.</p>
+<p>So whether you’re a long-time homeowner who still has no idea what you’re doing with your escrow account, or if you’re a first-time homebuyer who’s intimidated by it – you’re at the right place. I’m here to help you <a href="http://www.quickenloans.com/blog/escrow-answers-common-questions." target="_blank">understand your escrow account</a>.</p>
+<h2>What’s an escrow account?</h2>
+<p>The easiest way to think of an <a href="http://www.quickenloans.com/blog/understanding-mortgage-escrow" target="_blank">escrow account</a> is as a savings account that is owned by someone other than your mortgage servicer. A portion of each mortgage payment you make is deposited into this account to cover your estimated real estate taxes and insurance premiums. It’s that simple.</p>
+<h2>How does an escrow account work?</h2>
+<p>Your mortgage servicer uses the money in the escrow account to make payments on your behalf for the taxes and insurance required under the terms of your loan. When the taxes and insurance premiums are due, they are paid directly by the mortgage servicer. The biggest benefit of an escrow account is that you can guarantee your bills will be paid in full and on time, without having to budget for a large payment separately.</p>
+<h2>How are your escrow payments determined?</h2>
+<p>Your mortgage servicer will estimate the amount that will have to be paid for your real estate tax and homeowners insurance bills. This estimate is based on information provided during closing, through the taxing authority and insurance company, or previous tax and insurance bills.</p>
+<p>The estimated payment is then divided by 12 to determine the amount of the monthly payment, and that amount is added to your monthly mortgage statement.</p>
+<p>Aside from taxes and insurance, what other bills are paid from an escrow account?</p>
+<p>Your escrow account covers real estate taxes and insurance premiums like homeowners insurance and flood insurance. Escrow accounts do not pay things like homeowner association fees, personal property insurance, special or added tax assessments, or other fees.</p>
+<h2>What are the minimum balance requirements?</h2>
+<p>The Real Estate Settlement Procedures Act (RESPA) limits the amount to one-sixth of the total amount of items paid from the account, or approximately two months’ worth of payments. This minimum balance helps guarantee that if your taxes or insurance payments increase, you’ll be covered without facing a large and expensive shortage. Your account will be analyzed yearly to ensure you’re paying what you should – not less and not more than necessary. Once the analysis has been completed, any excess funds over $50 will be returned to you.</p>
+<h2>What’s an escrow analysis?</h2>
+<p>As I mentioned, every year your mortgage servicer will analyze and review your account to make sure you’re paying the correct amount into your escrow account in order to maintain the minimum required balance. Increases or decreases in your annual tax or insurance bills may cause your monthly mortgage payment amount to change. If that’s the case, your mortgage servicer will provide you with a surplus or shortage statement to explain how this will affect your monthly mortgage payment.</p>
+<h2>Why have your taxes/insurance premiums gone down but not your payment?</h2>
+<p>Your escrow payment will only be adjusted during your yearly escrow analysis. If you want to adjust your payments sooner, contact your mortgage servicer.</p>
+<h2>What’s a shortage? What’s a surplus?</h2>
+<p>If the amount paid toward taxes and insurance was higher than expected, your account may have a shortage. That means you were paying toward an amount that was estimated too low. You were not paying enough into your escrow account to cover the actual cost of the bills. You‘ll be responsible for making up the shortage in your account and your monthly mortgage payment may rise as a result.</p>
+<p>Typically you can pay the escrow account shortage in one of two ways:</p>
+<ul>
+<li>Make a one-time payment of the full amount.</li>
+<li>Pay the amount over 12 months by adding the extra amount to your regular monthly mortgage payment.</li>
+</ul>
+<p>If the total amount of the bills was lower than expected, your account may have a surplus. This means you were paying more than what you should have and now you have extra money in your account. Great news, right?</p>
+<h2>Do you have to have an escrow account?</h2>
+<p>It’s the lender’s decision whether or not an escrow account is required. It’s not something that is regulated by the federal government or RESPA. However, many lenders require escrow accounts for government-backed loans like VA or FHA loans.</p>
+<p>This is just a high-level overview of escrow accounts. Your mortgage servicer may have more detailed information that could help you gain a deeper understanding of your specific account information. Each servicer has its own way of approaching things like the escrow analysis statement, or how to make a payment if you have a shortage. But really, when it comes down to it, as long as you understand the basics I’ve covered here, you’ll be good to go on understanding how your escrow account works!</p>
+<p>To learn more, <a href="http://quickenloans.com" target="_blank">speak with a home loan expert today</a>!</p>
+<p>The post <a href="http://www.quickenloans.com/blog/understanding-your-escrow-account">Escrow: The One Word That Confuses Every Homeowner</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/understanding-your-escrow-account/feed</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/jade-house.jpg" width="847" height="567"/></media:group>	</item>
+		<item>
+		<title>The Difference Between Conventional and Non-Conventional Home Loans</title>
+		<link>http://www.quickenloans.com/blog/the-difference-between-conventional-and-non-conventional-home-loans</link>
+		<comments>http://www.quickenloans.com/blog/the-difference-between-conventional-and-non-conventional-home-loans#comments</comments>
+		<pubDate>Wed, 22 Apr 2015 21:18:33 +0000</pubDate>
+		<dc:creator><![CDATA[Chelsea Komblevicz]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62756</guid>
+		<description><![CDATA[<p>If you’re currently in the process of purchasing a home, you may have come across the terms “conventional” and “non-conventional.” But what’s the difference? And why should you choose one over the other? </p><p>The post <a href="http://www.quickenloans.com/blog/the-difference-between-conventional-and-non-conventional-home-loans">The Difference Between Conventional and Non-Conventional Home Loans</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/Two-Houses.jpg"><img class="alignleft  wp-image-62757" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/Two-Houses.jpg" alt="Two Houses" width="354" height="527" /></a>If you’re currently in the process of purchasing a home, you may have come across the terms “conventional” and “non-conventional.” But what’s the difference? And why should you choose one over the other?</p>
+<h2>Conventional Loans</h2>
+<p>A conventional loan is any type of mortgage that is <em>not</em> secured by a government-sponsored entity (GSE), such as the Federal Housing Administration (FHA) or the U.S. Department of Veterans Affairs (VA).</p>
+<p>These loans are also known as “conforming loans” because they meet guidelines or “conform” to the rules set forth by Fannie Mae and Freddie Mac, the two largest investors of conventional loans. The rules they conform to include a minimum FICO requirement of 620, a loan amount not exceeding $417,000 for a single-family home, and a <a href="http://www.quickenloans.com/mortgage-glossary/debt-to-income-ratio" target="_blank">debt-to-income</a> (DTI) ratio not exceeding 36%.</p>
+<p>DTI represents the amount of your monthly mortgage payments and other debts in comparison to your monthly gross income. Total debts usually can’t exceed 36% of your monthly gross income. In certain circumstances, you can have a DTI as high as 45%, but only if you meet Fannie and Freddie’s requirements, including exceptional credit history.</p>
+<p>Additionally, conventional loans require a down payment of at least 20%. So if your loan amounts to $100,000, you would need to put down $20,000 plus any fees and closing costs upfront. If you’re not able to put down 20%, you’re required to buy private mortgage insurance (PMI).</p>
+<p>There are two basic types of conventional loans:</p>
+<ul>
+<li><a href="http://www.quickenloans.com/home-loans/30-year-fixed" target="_blank">Fixed rate</a>: Your mortgage rate never changes over the life of your loan.</li>
+</ul>
+<ul>
+<li><a href="http://www.quickenloans.com/home-loans/adjustable-rate-mortgage" target="_blank">Adjustable rate</a>: After an initial fixed-rate period, your interest rate can adjust up or down, depending on the market. This option can save you money if you plan to move or refinance within 5–10 years.</li>
+</ul>
+<p>In the past, prospective homeowners were required to put down at least 5% for conventional loans, but a <a href="http://www.quickenloans.com/blog/small-down-payment-low-equity-here-are-some-new-loan-options-for-you" target="_blank">recent program</a> now allows down payments as low as a 3%. With attractive interest rates and the option for a low down payment, a conventional loan is a great option for some buyers.</p>
+<h2>Non-Conventional Loans</h2>
+<p>The other type of loan is called a non-conventional, or “government” loan. These loans are backed by the government, offering different and sometimes more flexible products for certain buyers. Depending on your financial situation, non-conventional loans can help you obtain a mortgage when you otherwise may not have met conventional guidelines.</p>
+<p>There are two types of non-conventional loans:</p>
+<ul>
+<li><a href="http://www.quickenloans.com/home-loans/fha-loan" target="_blank">FHA</a>: An FHA loan has less stringent qualifications and credit requirements than a conventional loan. You can put less than 20% down when purchasing. FHA loans, however, do require you to pay mortgage insurance premiums (MIP).</li>
+</ul>
+<ul>
+<li><a href="http://www.quickenloans.com/home-loans/va-loan" target="_blank">VA</a>: VA loans allow veterans to purchase a house with zero money down and offer a wide variety of products to fit your needs.</li>
+</ul>
+<p>Whether you choose a loan product that is conventional or non-conventional, you should always discuss your options with your Home Loan Expert. Your individual situation will determine which loan option fits you best.</p>
+<p>To learn more about the mortgage process, check out the Zing Blog’s new <a href="https://www.youtube.com/playlist?list=PL7DA6D5A8202C29A2" target="_blank">educational video series</a> on YouTube:</p>
+<ul>
+<li><a href="https://youtu.be/ixOMk8GuwVA?list=PL7DA6D5A8202C29A2" target="_blank" rel="nofollow">Understanding the Good Faith Estimate (GFE)</a></li>
+<li><a href="https://youtu.be/zb8MwV2Z_PU?list=PL7DA6D5A8202C29A2" target="_blank" rel="nofollow">The Difference Between Mortgage Rates and APR</a></li>
+<li><a href="https://youtu.be/mfUgyLRxZRs?list=PL7DA6D5A8202C29A2" target="_blank" rel="nofollow">Understanding Home Buying: The Mortgage Process</a></li>
+<li><a href="https://youtu.be/J93ColcKbko?list=PL7DA6D5A8202C29A2" target="_blank" rel="nofollow">What Is Mortgage Escrow?</a></li>
+<li><a href="https://youtu.be/OFViOZrCRFk?list=PL7DA6D5A8202C29A2" target="_blank" rel="nofollow">Understanding Mortgage Amortization</a></li>
+</ul>
+<p>The post <a href="http://www.quickenloans.com/blog/the-difference-between-conventional-and-non-conventional-home-loans">The Difference Between Conventional and Non-Conventional Home Loans</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/the-difference-between-conventional-and-non-conventional-home-loans/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/
+0000242B
+blog/wp-content/uploads/2015/04/Two-Houses.jpg" width="568" height="845"/></media:group>	</item>
+		<item>
+		<title>A Few Pointers on Mortgage Discount Points</title>
+		<link>http://www.quickenloans.com/blog/a-few-pointers-on-mortgage-discount-points</link>
+		<comments>http://www.quickenloans.com/blog/a-few-pointers-on-mortgage-discount-points#comments</comments>
+		<pubDate>Fri, 10 Apr 2015 21:26:47 +0000</pubDate>
+		<dc:creator><![CDATA[Patrick Chism]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Mortgage Discount Points]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62648</guid>
+		<description><![CDATA[<p>Whether you’re a first-time homebuyer or a veteran of the mortgage process, it’s easy to be confused by mortgage discounts points. Let’s break down the purpose of these points, as well as the overall benefits and risks of buying them. This information could save you thousands over the life of your loan. </p><p>The post <a href="http://www.quickenloans.com/blog/a-few-pointers-on-mortgage-discount-points">A Few Pointers on Mortgage Discount Points</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><a href="http://www.quickenloans.com/blog/wp-content/uploads/2015/03/iStock_000010342358Small.jpg"><img class="alignleft  wp-image-62417" src="http://www.quickenloans.com/blog/wp-content/uploads/2015/03/iStock_000010342358Small.jpg" alt="suburban neighborhood" width="458" height="305" /></a>In order to get the best rate on a mortgage purchase or refinance, you should consider purchasing mortgage discount points, which will allow you to lock down a lower interest rate. Discount points are a form of interest that is paid at closing; each point equals 1% of the total loan amount. In other words, if the amount of your loan is $150,000, one point would cost you $1,500 at the time of closing. At first glance, the idea of paying more in closing costs may seem outrageous, but when you look at the long-term advantages of mortgage discount points, you may find that they’ll save you big bucks over the life of your loan. Let’s take a look at the benefits of mortgage discount points to find out if they’re right for you.</p>
+<h2>Perks of the Discount Points</h2>
+<p>Mortgage discount points are all about playing the long game. Let’s use a $150,000 loan as an example to illustrate the long-term benefits of discount points. If you want to plug in your own numbers, check out these handy <a href="http://www.quickenloans.com/mortgage-calculator" target="_blank" rel="nofollow">calculators</a> from Quicken Loans.</p>
+<p>Loan Amount: $150,000 for 30 years</p>
+<table>
+<tbody>
+<tr>
+<td width="47">Points</td>
+<td width="78">Interest Rate</td>
+<td width="108">Monthly Payments</td>
+</tr>
+<tr>
+<td width="47">0</td>
+<td width="78">4.125%</td>
+<td width="108">$727</td>
+</tr>
+<tr>
+<td width="47">1.25</td>
+<td width="78">3.875%</td>
+<td width="108">$706</td>
+</tr>
+<tr>
+<td width="47">1.75</td>
+<td width="78">3.75%</td>
+<td width="108">$695</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>If you purchase 1.75 mortgage discount points (with a point costing 1% of the loan amount), it will cost you $2,625 at the time of closing. This may seem like a hefty amount on top of your down payment and other closing costs, but consider how this low interest rate will benefit you over the course of the loan. If you decide <em>not</em> to purchase any mortgage discount points, then the total amount of your loan at the end of 30 years will be $261,700. But if you purchased 1.75 mortgage discount points, your total amount paid will be $250,000.</p>
+<p>If you subtract the original cost of the 1.75 points ($2,625), you would still be saving <strong>$8,895 over 30 years</strong>. And even if you don’t stay in your home for 30 years, you’ll break even in about seven years. So, as long as you’re planning on living in your home for more than seven years, you should consider purchasing mortgage discount points.</p>
+<h2>Are Mortgage Points Right for Me?</h2>
+<p>While mortgage discount points are an excellent choice for some clients, they’re not right for everyone. As mentioned in the example above, the length of time you stay in your home is one of the most important factors. If you’re a wandering soul and you only plan to live in your house for a few years, it’s probably a better decision to pay lower closing costs and higher monthly payments.</p>
+<p>Another aspect to consider is private mortgage insurance (PMI). As long as your down payment on a mortgage is under 20%, you’ll be required to pay PMI, which typically costs about 1% of the loan amount. In the case of a $150,000 house, this means the PMI will cost $1,500 a year or $125 a month.</p>
+<p>This is important for clients who are on the fence between paying for mortgage discount points or a larger down payment. If it’s between discount points and boosting your down payment to 20% or over, you’ll want to choose the down payment most of the time. Always do the math and consider if your discount points are costing you more or less than your monthly PMI fees.</p>
+<h2>Take the Points; Invest the Surplus</h2>
+<p>If you decide to purchase mortgage discount points, you should also consider investing the excess money that you save every month. Let’s say you decide to purchase 1.75 mortgage discount points on your $150,000 loan, meaning your monthly payment is $695. This means you’ll have a monthly <em>savings</em> of $32. If you take that $32 and invest it month after month, then by the end of the 30-year period (assuming a 7% interest rate), you will have $38,812.10. This far outweighs the initial $2,625 cost during the initial purchase of the points.</p>
+<p>Once again, this option is all about the timing. If you only have your home for seven years, and you invest your excess funds during that time, you’ll only be getting about $3,500 out of your investment. At that ROI, you would be better off <em>not</em> paying for points at all and investing your initial $2,625. In the same seven years, this would produce about $4,200.</p>
+<h2>Tax Benefits</h2>
+<p>There are also tax benefits that come along with purchasing points. Points are considered prepaid interest, so they may be deductible as home mortgage interest, but you’ll to need to fill out Form 1040, Schedule A and itemize these deductions. Check out <a href="http://www.irs.gov/taxtopics/tc504.html" target="_blank" rel="nofollow">Topic 504 – Home Mortgage Points</a> from the IRS.</p>
+<h2>The Discount Point Decision</h2>
+<p>Deciding if discount points are the right decision for you can be a tricky part of the mortgage process. If you want to learn more about which option is best for you, contact a <a href="http://www.quickenloans.com/" target="_blank" rel="nofollow">Home Loan Exper</a>t at Quicken Loans. They’ll be sure to point you in the right direction.</p>
+<p>The post <a href="http://www.quickenloans.com/blog/a-few-pointers-on-mortgage-discount-points">A Few Pointers on Mortgage Discount Points</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/a-few-pointers-on-mortgage-discount-points/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/03/iStock_000010342358Small.jpg" width="849" height="565"/></media:group>	</item>
+		<item>
+		<title>How to Use a Mortgage Calculator</title>
+		<link>http://www.quickenloans.com/blog/how-to-use-a-mortgage-calculator</link>
+		<comments>http://www.quickenloans.com/blog/how-to-use-a-mortgage-calculator#comments</comments>
+		<pubDate>Thu, 09 Apr 2015 20:09:13 +0000</pubDate>
+		<dc:creator><![CDATA[Kevin Graham]]></dc:creator>
+				<category><![CDATA[Mortgage Basics]]></category>
+		<category><![CDATA[Mortgage Calculator]]></category>
+		<category><![CDATA[Zing Education Series]]></category>
+
+		<guid isPermaLink="false">http://zingadmin.mi.corp.rockfin.com/blog/?p=62637</guid>
+		<description><![CDATA[<p>Quicken Loans Director of Solution Consulting Eddie Berger explains how you can use mortgage calculators to play out scenarios affecting your mortgage payment, such as changing the term and rate. You can also calculate how much you would save by paying off your mortgage sooner.</p><p>The post <a href="http://www.quickenloans.com/blog/how-to-use-a-mortgage-calculator">How to Use a Mortgage Calculator</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></description>
+				<content:encoded><![CDATA[<p><iframe class="wistia_embed" src="//fast.wistia.net/embed/iframe/80h8t4tg66" name="wistia_embed" width="615" height="346" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen"></iframe><script src="//fast.wistia.net/assets/external/E-v1.js" async=""></script></p>
+<p>You may be thinking about purchasing a house or refinancing the one you’re already in. This decision brings with 
+000015F6
+it number of questions. What kind of interest rate can I get? What kind of payment should I expect? How much money can I save by paying off the loan before the end of the term?</p>
+<p>In the latest video in our Quicken Loans Zing Blog Education Series, Eddie Berger, director of solution consulting at Quicken Loans, explains how you can use mortgage calculators to play out various scenarios and know what to expect when you’re ready to apply.</p>
+<p>As Berger explains, there are four variables in any mortgage calculator:</p>
+<ul>
+<li>Term</li>
+<li>Loan amount</li>
+<li>Payment</li>
+<li>Interest rate</li>
+</ul>
+<p>If you know three of these variables, you can solve for the fourth. We have three different types of calculators on the Quicken Loans website: purchase, refinance and amortization.</p>
+<h2>Purchase Calculator</h2>
+<p>If you’re looking to buy a new home, our <a href="https://www.quickenloans.com/my-mortgage/calculator#!/purchase/question/primary-mortgage-goal" target="_blank" rel="nofollow">purchase calculator</a> can help you run the numbers.</p>
+<p>First, the calculator asks whether you want to pay off the home sooner or have a lower payment. Next, you put in how much you want to spend on the house and the amount of your down payment. This determines your loan amount. A rough credit range helps determine the interest rate you qualify for. After that, you put in the ZIP code where you’re looking to buy.</p>
+<p>The result will bring up a screen with a rate and a payment. You can see several different rate options and specify whether you want a fixed or adjustable rate mortgage (ARM), etc. Taxes and insurance aren’t included in the payment on any of the calculators, but if you know how much you would be paying in your area, you can add this information, and the payment will be recalculated for you.</p>
+<h2>Refinance Calculator</h2>
+<p>What if you’re not looking to move to a new place, but instead looking to refinance your current home? There’s a calculator for that, too.</p>
+<p>The <a href="https://www.quickenloans.com/my-mortgage/calculator#!/refinance/question/primary-mortgage-goal" target="_blank" rel="nofollow">refinance calculator</a> first asks about your primary goal for your new loan. You can choose between lowering your payment, paying off your home sooner and getting a lower interest rate. Depending on which option you select, you’ll either be asked what your current monthly payment is or your current interest rate.</p>
+<p>After that, you’ll be asked to estimate how much your home is worth and what you still owe to determine the amount of the loan. Then you input a rough credit estimate and your ZIP code.</p>
+<p>As with the purchase calculator, the results page will show you a sample rate and payment. You can play with the rate and type of loan, as well as add taxes and insurance.</p>
+<h2>Amortization Calculator</h2>
+<p>Amortization is just a fancy word for the schedule that determines how much of your payment goes toward paying off principal and how much goes toward interest. At the beginning of a loan, more of your payment goes toward paying interest than paying down your principal. The opposite is true at the end of the loan.</p>
+<p>What’s pretty cool though is that you can pay extra on your monthly mortgage payment and have that amount applied to your loan’s principal balance. By paying a little bit extra, you can pay down the principal faster to save on interest.</p>
+<p>The purpose of the <a href="https://www.quickenloans.com/mortgage-calculator/mortgage-amortization-calculator" target="_blank" rel="nofollow">amortization calculator</a> is to show you just how much interest and how many months of payments you can save by tacking some more money onto your payment.</p>
+<p>The calculator asks you to input your current loan amount, the length of your loan, your interest rate and the state you live in. You can also see what the effect of a one-time, monthly or yearly additional payment would be on your number of monthly payments or interest.</p>
+<p>The results show a sample monthly payment (excluding taxes and insurance) and the interest you would pay. If you’ve chosen to add an additional payment, it shows you how much interest and how many months of payments you could save by putting extra money toward paying down your principal. There’s also a graph that breaks down how much of your payment goes toward principal and how much goes toward interest.</p>
+<p>Eddie shows how it all works in the video above. If you have any more questions about our mortgage calculators, feel free to leave them in the comments.</p>
+<p>The post <a href="http://www.quickenloans.com/blog/how-to-use-a-mortgage-calculator">How to Use a Mortgage Calculator</a> appeared first on the <a href="http://www.quickenloans.com/blog">ZING Blog by Quicken Loans</a>.</p>]]></content:encoded>
+			<wfw:commentRss>http://www.quickenloans.com/blog/how-to-use-a-mortgage-calculator/feed</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+	<media:group><media:content isDefault="true" medium="image" type="" url="http://www.quickenloans.com/blog/wp-content/uploads/2015/04/Understanding-Mortgage-Calculators.png" width="611" height="342"/></media:group>	</item>
+	</channel>
+</rss>
+
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Minified using memcached
+Page Caching using memcached
+Database Caching 4/37 queries in 0.070 seconds using memcached
+Object Caching 2426/2899 objects using memcached
+
+ Served from: www.quickenloans.com @ 2015-07-11 15:47:35 by W3 Total Cache -->
+
+

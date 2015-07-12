@@ -4,27 +4,45 @@ Acting as a middleman, the first request will be allowed so that it can be saved
 for all subsequent calls. Please note that playback is indefinite, until the local cache is deleted, or the interception
 stream wrapper is unregistered.
 
-** Disclaimer: This library will only work with PHP streams. Other PHP extensions such as cURL, are not supported. **
+The intended use of this library was to aid in mocking/simulating HTTP request during Unit tests runs. By allowing a
+real request to a service to be saved and played back during unit test. Since this works at the PHP stream level,
+existing code should only need minimal change, if any.
 
-1 request - consist of the headers and the payload are saved as *.rsd
-2 rsd - stand for "raw socket data" file. No encoding is done.
+Beside fopen and file_get_contents, there is also a Guzzle handler which can be used in order for this to work with
+code that uses Guzzle. See example using (Guzzle ~5.0)[#how-can-i-use-this-with-guzzle]
+
+** Disclaimer: This library will only work with PHP streams. Other PHP extensions such as cURL, are not supported.
+
+1. request - consist of the headers and the payload are saved as *.rsd
+2. rsd - stand for "raw socket data" file. No encoding is done.
 
 
 ## Requirements
 
-* PHP 5.4+
+* PHP ~5.4
+* PHPUnit ~4.7
 
 
 ## How it works
 
-The built-in wrapper for protocols like HTTP are first unregistered, then replaced with the StreamWrappers\Http wrapper.
-When an HTTP request is made using stream PHP functions \fopen or \file_get_contents, the interception wrapper will then
-make a TCP connection and return that as a resource for those functions.
+The built-in wrapper for the protocol HTTP/HTTPS are first unregistered, then replaced with the Interception
+StreamWrappers\Http wrapper. Once registered, you must specify a filename using Http::setSaveFilename(), which will
+be used to save the response to a file with that name. When an HTTP/HTTPS request is made using PHP stream functions
+fopen() or file_get_contents(), the interception wrapper will then make a TCP connection and return that as a
+resource for those functions. Once eof() has been called on the resource, a file is saved using the name provided;
+Which will contain the header and any content retrieved.
 
-Only content read using the returned TCP resource will be saved to a file when \fclose is called. If at a later time,
-another request is made to that same URL, a file resource to the saved request is initialized and returned for those
-functions. What ever content that was retrieved from the previous TCP connection will be served up for any following
-request; to that exact URL.
+A note about fopen(). Unlike file_get_contents(), all content is not read at one time. Only content read using (fread
+ on) the returned TCP resource will be saved to a file once fclose() is called.
+
+Once a filename has been set, all HTTP request will get the response saved in that file. So it is important to
+remember that if you want a different request, you need to provide a new file name. Or you can restore the default
+Http functionality by calling stream_wrapper_restore( 'http' ), which will remove the Interception stream wrapper.
+
+Now that you have the response from the request saved, you can use Interceptions Http stream wrapper class
+(StreamWrappers\Http) to simulated the request. There is nothing else you need to do as long as the
+StreamWrappers\Http class is registered as PHP stream wrapper handler. Since this is at the stream wrapper layer, it
+will work for any code that uses PHP Streams.
 
 In cases where this is the first call to a URL, using \fopen, but \foef did not return TRUE; then only partial content
 will be saved. At minimum the HEADER for the request will be saved.
@@ -154,4 +172,26 @@ public function test_interception_annotation()
 
 ```bash
 ./vendor/bin/phpunit
+```
+
+## How can I use this with Guzzle
+
+```php
+use \GuzzleHttp\Client,
+    \Kshabazz\Interception\StreamWrappers\Http,
+    \Kshabazz\Interception\GuzzleHandler;
+
+// Set the file to save the response to, in your unit test, you could set this with the "@interception" annotation also.
+Http::setSaveFilename( 'google-dot-come' );
+
+// Interception Guzzle compatible stream handler
+$streamHandler = new GuzzleHandler();
+
+// Have Guzzle use the Interception stream handler, so request can be intercepted.
+$httpClient = new Client([
+	'handler' => $streamHandler
+]);
+
+// Make the request.
+$httpClient->get( 'http://www.google.com/ );
 ```

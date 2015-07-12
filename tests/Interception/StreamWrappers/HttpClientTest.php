@@ -9,6 +9,9 @@ use \GuzzleHttp\Client,
 
 class HttpClientTest extends \PHPUnit_Framework_TestCase
 {
+	/** @var string */
+	private $fixtureDir;
+
 	static public function setUpBeforeClass()
 	{
 		\stream_wrapper_unregister( 'http' );
@@ -27,6 +30,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		// Clean up all ignore files.
 		$removeFiles = \glob( FIXTURES_PATH . DIRECTORY_SEPARATOR . 'ignore*' );
 		\array_map( 'unlink', $removeFiles );
+	}
+
+	public function setUp()
+	{
+		$this->fixtureDir = \FIXTURES_PATH . DIRECTORY_SEPARATOR;
 	}
 
 	public function test_intercepting_ringphp_stream_handle_request()
@@ -75,6 +83,27 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 		Http::clearPersistSaveFile();
 		$requestIntercepted = \file_exists( FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '-1.rsd' );
 		$this->assertTrue( $requestIntercepted );
+	}
+
+	public function test_intercepting_guzzle_client_request_for_rss_xml()
+	{
+		$filename = 'rss-xml';
+		$streamHandler = new GuzzleHandler();
+		// Set the file to save to.
+		Http::setSaveFilename( $filename );
+		// Have Guzzle use the Interception stream handler, so request can be intercepted.
+		$httpClient = new Client([
+			'handler' => $streamHandler
+		]);
+		// Have Guzzle load some XML from an RSS feed.
+		$httpClient->get(
+			'http://www.quickenloans.com/blog/category/mortgage/mortgage-basics/feed'
+		);
+		// cleanup for the next test.
+		Http::clearSaveFile();
+		// Verify that the RSS feed request was save to a file.
+		$filename = $this->fixtureDir . $filename . '.rsd';
+		$this->assertFileExists( $filename );
 	}
 }
 ?>
