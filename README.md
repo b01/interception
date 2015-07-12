@@ -163,18 +163,7 @@ public function test_interception_annotation()
 }
 ```
 
-## How do I update responses.
-
-1. Delete the *.rsd file in your fixtures directory, so the next time you
-   run tests, a new one will be saved.
-
-## Run Unit Test
-
-```bash
-./vendor/bin/phpunit
-```
-
-## How can I use this with Guzzle
+### How can I use this with Guzzle
 
 ```php
 use \GuzzleHttp\Client,
@@ -194,4 +183,17 @@ $httpClient = new Client([
 
 // Make the request.
 $httpClient->get( 'http://www.google.com/ );
+```
+
+
+## How do I update responses.
+
+1. Delete the *.rsd file in your fixtures directory, so the next time you
+   run tests, a new one will be saved.
+
+
+## Run Unit Test
+
+```bash
+./vendor/bin/phpunit
 ```
