@@ -118,7 +118,7 @@ class Http implements \ArrayAccess, \Countable
 		}
 
 		// Close the resource.
-		if ( $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->resourceType === static::RESOURCE_TYPE_FILE )
 		{
 			\fclose( $this->resource );
 		}
@@ -129,7 +129,7 @@ class Http implements \ArrayAccess, \Countable
 			$saveFile = $this->getSaveFile();
 			\file_put_contents( $saveFile, $this->content );
 		}
-		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		else if ( $this->resourceType === static::RESOURCE_TYPE_SOCKET )
 		{
 			// This could throw errors if the socket is not connected on some systems.
 			@\socket_shutdown( $this->resource );
@@ -143,7 +143,7 @@ class Http implements \ArrayAccess, \Countable
 		$this->resource = NULL;
 
 		// Reset so we do not overwrite a file unintentionally for the next request.
-		self::clearSaveFile();
+		static::clearSaveFile();
 	}
 
 	/**
@@ -154,11 +154,11 @@ class Http implements \ArrayAccess, \Countable
 		// Start off assuming the EOF has been reached.
 		$eof = TRUE;
 
-		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->ssl || $this->resourceType === static::RESOURCE_TYPE_FILE )
 		{
 			$eof = \feof( $this->resource );
 		}
-		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		else if ( $this->resourceType === static::RESOURCE_TYPE_SOCKET )
 		{
 			$bytes = \socket_recv( $this->resource, $buffer, 1, \MSG_PEEK );
 			if ( $bytes === FALSE )
@@ -195,21 +195,21 @@ class Http implements \ArrayAccess, \Countable
 
 		$this->url = \parse_url( $pPath );
 		//
-		if ( self::$saveFilePersist )
+		if ( static::$saveFilePersist )
 		{
-			++self::$persistFileIncrement;
+			++static::$persistFileIncrement;
 		}
 		// See if we have a save file for this request.
 		$localFile = $this->getSaveFile();
 		// Load from local file, or make an internet request.
 		if ( \file_exists($localFile) )
 		{
-			$this->resourceType = self::RESOURCE_TYPE_FILE;
+			$this->resourceType = static::RESOURCE_TYPE_FILE;
 			$this->resource = \fopen( $localFile, 'r' );
 		}
 		else
 		{
-			$this->resourceType = self::RESOURCE_TYPE_SOCKET;
+			$this->resourceType = static::RESOURCE_TYPE_SOCKET;
 			$timeout = ini_get( 'default_socket_timeout' );
 			$this->ssl = ( \strcmp($this->url['scheme'], 'https') === 0 );
 			$port = ( $this->ssl ) ? 443 : 80;
@@ -333,10 +333,10 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	static public function clearPersistSaveFile()
 	{
-		self::$saveFilePersist = FALSE;
-		self::$persistFileIncrement = 0;
+		static::$saveFilePersist = FALSE;
+		static::$persistFileIncrement = 0;
 
-		return self::clearSaveFile();
+		return static::clearSaveFile();
 	}
 
 	/**
@@ -347,9 +347,9 @@ class Http implements \ArrayAccess, \Countable
 	static public function clearSaveFile()
 	{
 		// Clear the save file, unless explicitly told not to.
-		if ( !self::$saveFilePersist )
+		if ( !static::$saveFilePersist )
 		{
-			self::$saveFile = '';
+			static::$saveFile = '';
 			return TRUE;
 		}
 
@@ -365,12 +365,12 @@ class Http implements \ArrayAccess, \Countable
 	static public function getSaveDir()
 	{
 		// When not set.
-		if ( !\is_dir(self::$saveDir) )
+		if ( !\is_dir(static::$saveDir) )
 		{
 			throw new InterceptionException( 'Please set a directory to save the request files.' );
 		}
 
-		return self::$saveDir;
+		return static::$saveDir;
 	}
 
 	/**
@@ -380,7 +380,7 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	static public function getSaveFilename()
 	{
-		return self::$saveFile;
+		return static::$saveFile;
 	}
 
 	/**
@@ -391,8 +391,8 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	static public function persistSaveFile( $pPersistFilename )
 	{
-		self::$saveFilePersist = self::setSaveFilename( $pPersistFilename );
-		return self::$saveFilePersist;
+		static::$saveFilePersist = static::setSaveFilename( $pPersistFilename );
+		return static::$saveFilePersist;
 	}
 
 	/**
@@ -403,9 +403,9 @@ class Http implements \ArrayAccess, \Countable
 	static public function persistSuffix()
 	{
 		$suffix = '';
-		if ( self::$saveFilePersist )
+		if ( static::$saveFilePersist )
 		{
-			$suffix = '-' . self::$persistFileIncrement;
+			$suffix = '-' . static::$persistFileIncrement;
 		}
 		return $suffix;
 	}
@@ -420,9 +420,10 @@ class Http implements \ArrayAccess, \Countable
 	{
 		if ( \is_dir($pDirectory) )
 		{
-			self::$saveDir = \realpath( $pDirectory );
+			static::$saveDir = \realpath( $pDirectory );
 			return TRUE;
 		}
+
 		return FALSE;
 	}
 
@@ -434,9 +435,9 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	static public function setSaveFilename( $pFilename )
 	{
-		if ( self::isValidFilename($pFilename) )
+		if ( static::isValidFilename($pFilename) )
 		{
-			self::$saveFile = $pFilename;
+			static::$saveFile = $pFilename;
 			return TRUE;
 		}
 
@@ -540,7 +541,7 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	private function getSaveFile()
 	{
-		$filename = self::getSaveFilename() . self::persistSuffix();
+		$filename = static::getSaveFilename() . static::persistSuffix();
 		// When not set.
 		if ( empty($filename) )
 		{
@@ -549,7 +550,7 @@ class Http implements \ArrayAccess, \Countable
 		$ext = '.rsd';
 
 		// Build file path.
-		return self::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
+		return static::getSaveDir() . DIRECTORY_SEPARATOR . $filename . $ext;
 	}
 
 	/**
@@ -563,7 +564,7 @@ class Http implements \ArrayAccess, \Countable
 		$buffer = NULL;
 
 		// When using a file stream.
-		if ( $this->resourceType === self::RESOURCE_TYPE_FILE ) {
+		if ( $this->resourceType === static::RESOURCE_TYPE_FILE ) {
 			$done = \feof( $this->resource );
 		}
 
@@ -629,12 +630,12 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	private function readFromResource( $pCount = 100 )
 	{
-		if ( $this->ssl || $this->resourceType === self::RESOURCE_TYPE_FILE )
+		if ( $this->ssl || $this->resourceType === static::RESOURCE_TYPE_FILE )
 		{
 			$buffer = \fread( $this->resource, $pCount );
 			return $buffer;
 		}
-		else if ( $this->resourceType === self::RESOURCE_TYPE_SOCKET )
+		else if ( $this->resourceType === static::RESOURCE_TYPE_SOCKET )
 		{
 			$buffer = $this->readFromSocket( $this->resource, $pCount );
 			return $buffer;
@@ -647,9 +648,9 @@ class Http implements \ArrayAccess, \Countable
 	 */
 	private function triggerSocketError()
 	{
-		$erroNo = socket_last_error( $this->resource );
-		$errorStr = \socket_strerror( $erroNo );
-		trigger_error( '\\Kshabazz\\Interception\\StreamWrappers\\Http ' . $errorStr );
+		$errorNo = \socket_last_error( $this->resource );
+		$errorStr = \socket_strerror( $errorNo );
+		\trigger_error( '\\Kshabazz\\Interception\\StreamWrappers\\Http ' . $errorStr );
 	}
 }
 ?>
