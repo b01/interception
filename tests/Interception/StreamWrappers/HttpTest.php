@@ -126,7 +126,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	public function test_http_socket_unknown_host_triggers_an_error()
 	{
 		Http::setSaveFilename( 'www-example-com-3' );
-		\fopen( 'http://test.example.com/', 'r' );
+		\fopen( 'http://test.example.fake/', 'r' );
 	}
 
 	public function test_meta_data_from_resource()
@@ -181,7 +181,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	{
 		$filename = 'server-not-found';
 		Http::setSaveFilename( $filename );
-		@\file_get_contents( 'http://test.example.com/' );
+		@\file_get_contents( 'http://test.example.fake/' );
 		$fileExists = \file_exists(
 			FIXTURES_PATH . DIRECTORY_SEPARATOR . $filename . '.rsd'
 		);

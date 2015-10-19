@@ -1,3 +1,14 @@
+# Table of Contents
+
+* Introduction
+* Requirements
+* How it works
+* Examples
+  * How to save HTTP request for playback during unit test (Manual way)
+  * Setup interception unit tests annotations with the InterceptionListener in PHPUnit
+
+## Introduction
+
 The purpose of this library is to record the request (1) of URI resources and play them back from local cache. When an
 interception stream wrapper is registered, for a given protocol, it will handle all URI request for that protocol.
 Acting as a middleman, the first request will be allowed so that it can be saved locally; this save is then played back
@@ -11,7 +22,9 @@ existing code should only need minimal change, if any.
 Beside fopen and file_get_contents, there is also a Guzzle handler which can be used in order for this to work with
 code that uses Guzzle. See example using (Guzzle ~5.0)[#how-can-i-use-this-with-guzzle]
 
-** Disclaimer: This library will only work with PHP streams. Other PHP extensions such as cURL, are not supported.
+## Disclaimer
+
+This library will only work with PHP streams. Other PHP extensions such as cURL, are not supported.
 
 1. request - consist of the headers and the payload are saved as *.rsd
 2. rsd - stand for "raw socket data" file. No encoding is done.
@@ -130,7 +143,7 @@ $fixturesPath = \realpath( __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' );
         <listener class="\Kshabazz\Interception\InterceptionListener">
             <arguments>
                 <!-- The first parameter must be the Interception class that will handle to protocol. -->
-                <string>Http</string>
+                <string>\Kshabazz\Interception\StreamWrappers\Http</string>
                 <!-- The second parameter can be a path or a constant that is set to a path. -->
                 <string>FIXTURES_PATH</string>
                 <!-- The third parameter should list the protocols to handle. -->
@@ -162,6 +175,32 @@ public function test_interception_annotation()
     $this->assertFileExists( \file_exists($filename) );
 }
 ```
+
+### How can I intercept multiple HTTP(S) request
+
+When use use the InterceptionListener you can intercept multiple HTTP request in a single unit test by using the
+"@interceptionPersist <filename>" annotation. Like so:
+
+```php
+/**
+* Now the HTTP request will be stored in the file "example-dot-com.rsd"
+*
+* @interceptionPersist example-dot-com
+*/
+public function test_interception_annotation()
+{
+    $responseBody = file_get_content( 'http://www.example.com/', 'r' );
+    $responseBody = file_get_content( 'http://www.example.com/', 'r' );
+
+    $filename1 = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'example-dot-com-1.rsd';
+    $filename2 = FIXTURES_PATH . DIRECTORY_SEPARATOR . 'example-dot-com-2.rsd';
+
+    $this->assertFileExists( \file_exists($filename1) );
+    $this->assertFileExists( \file_exists($filename2) );
+}
+```
+
+Notice each time you make a request, the filename will be appended with the number of the request.
 
 ### How can I use this with Guzzle
 

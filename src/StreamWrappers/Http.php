@@ -24,7 +24,7 @@ class Http implements \ArrayAccess, \Countable
 		/** @var int cursor position in the stream. */
 		$position;
 
-	private static
+	static private
 		/** @var int Increment file when $saveFilePersist is true. */
 		$persistFileIncrement = 0,
 		/** @var string Directory to save raw files. */

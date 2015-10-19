@@ -20,7 +20,7 @@ class InterceptionException extends \Exception
 	private $messages = [
 		self::GENERIC => 'An errors has occurred.',
 		self::BAD_SAVE_DIR => 'Second argument must be a directory where to save RSD files.',
-		self::BAD_STREAM_WRAPPER => 'You must set the stream wrapper class as the first argument, leave out the namespace.',
+		self::BAD_STREAM_WRAPPER => 'You must set the stream wrapper class as the first argument.',
 		self::BAD_SAVE_CONST => 'Constant "%s" did not map to a valid directory where to save RSD files.',
 		self::NO_FILENAME => 'Please set a filename to save the contents of the request.'
 	];

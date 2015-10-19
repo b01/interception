@@ -11,9 +11,6 @@ use Kshabazz\Interception\StreamWrappers\Http;
  */
 class InterceptionListener extends \PHPUnit_Framework_BaseTestListener
 {
-	const
-		STREAM_WRAPPER_NAME_SPACE = '\\Kshabazz\\Interception\\StreamWrappers\\';
-
 	private
 		/** @var string Annotation key to flag all request be intercepted. */
 		$multiIntercept,
@@ -35,7 +32,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener
 	 */
 	public function __construct( $pWrapperClass, $pSaveDir, array $pWrappers)
 	{
-		$wrapperClass = self::STREAM_WRAPPER_NAME_SPACE . $pWrapperClass;
+		$wrapperClass = $pWrapperClass;
 
 		if ( empty($pWrapperClass) || !\class_exists($wrapperClass) )
 		{
@@ -74,8 +71,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener
 		// Intercept a single request per test.
 		if ( \array_key_exists($this->singleIntercept, $annotations['method']) )
 		{
-			$filename = $annotations[ 'method' ][ $this->singleIntercept ][ 0 ];
-			Http::setSaveFilename( $filename );
+			Http::clearSaveFile();
 		}
 		// Intercept multiple request per test.
 		if ( \array_key_exists($this->multiIntercept, $annotations['method']) )
@@ -129,7 +125,7 @@ class InterceptionListener extends \PHPUnit_Framework_BaseTestListener
 			\stream_wrapper_unregister( $wrapper );
 			\stream_register_wrapper(
 				$wrapper,
-				self::STREAM_WRAPPER_NAME_SPACE . $this->wrapperClass,
+				$this->wrapperClass,
 				\STREAM_IS_URL
 			);
 		}

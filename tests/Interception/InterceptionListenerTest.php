@@ -29,7 +29,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_initialization()
 	{
-		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, $this->fixtureDir, ['http'] );
 		$this->assertInstanceOf( '\\Kshabazz\\Interception\\InterceptionListener', $listener );
 	}
 
@@ -39,7 +39,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_interception_used_annotation_for_filename()
 	{
-		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, $this->fixtureDir, ['http'] );
 		$listener->startTestSuite( $this->suite );
 		$listener->startTest( $this );
 		$this->assertEquals( 'ignore-annotation-test', Http::getSaveFilename() );
@@ -47,7 +47,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @expectedException \Kshabazz\Interception\InterceptionException
-	 * @expectedExceptionMessage You must set the stream wrapper class as the first argument, leave out the namespace.
+	 * @expectedExceptionMessage You must set the stream wrapper class as the first argument.
 	 * @covers ::__construct
 	 */
 	public function test_no_stream_wrapper_class()
@@ -60,7 +60,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_endTestSuite()
 	{
-		$listener = new InterceptionListener( 'Http', $this->fixtureDir, ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, $this->fixtureDir, ['http'] );
 		$unregistered = $listener->endTestSuite( new \PHPUnit_Framework_TestSuite() );
 		$this->assertTrue( $unregistered );
 	}
@@ -72,7 +72,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_setting_save_invalid_directory()
 	{
-		( new InterceptionListener( 'Http', NULL, ['http']) );
+		( new InterceptionListener( HTTP_STREAM_WRAPPER, NULL, ['http']) );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	public function test_bad_constant_for_path()
 	{
 		define( 'BAD_PATH', 'bad directory' );
-		( new InterceptionListener('Http', 'BAD_PATH', ['http']) );
+		( new InterceptionListener( HTTP_STREAM_WRAPPER, 'BAD_PATH', ['http']) );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_loading_xml_with_file_get_contents()
 	{
-		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, 'FIXTURES_PATH', ['http'] );
 
 		// Get the listener to register the interception HTTP stream wrapper.
 		$listener->startTestSuite( $this->suite );
@@ -119,7 +119,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_xml()
 	{
-		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, 'FIXTURES_PATH', ['http'] );
 
 		// Get the listener to register the interception HTTP stream wrapper.
 		$listener->startTestSuite( $this->suite );
@@ -149,7 +149,7 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_multiple_request()
 	{
-		$listener = new InterceptionListener( 'Http', 'FIXTURES_PATH', ['http'] );
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, 'FIXTURES_PATH', ['http'] );
 
 		// Get the listener to register the interception HTTP stream wrapper.
 		$listener->startTestSuite( $this->suite );
@@ -169,6 +169,34 @@ class InterceptionListenerTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertFileExists( $fixture . '1.rsd');
 		$this->assertFileExists( $fixture . '2.rsd');
+	}
+
+	/**
+	 * @interception test-1
+	 */
+	public function test_part_1_filename_not_cleared()
+	{
+		$testFile = $this->fixtureDir . DIRECTORY_SEPARATOR . 'test-1.rsd';
+		$listener = new InterceptionListener( HTTP_STREAM_WRAPPER, $this->fixtureDir, ['http'] );
+
+		$listener->startTestSuite( $this->suite );
+		$listener->startTest( $this );
+		\file_get_contents( 'http://www.google.com/' );
+		$listener->endTest( $this, time() );
+
+		$this->assertFileExists( $testFile );
+		\unlink( $testFile );
+	}
+
+	/**
+	 * @depends test_part_1_filename_not_cleared
+	 */
+	public function test_part_2_filename_not_cleared()
+	{
+		$this->assertEmpty(
+			Http::getSaveFilename(),
+			'The filename is still set to "' . Http::getSaveFilename() . '" from the previous unit test.'
+		);
 	}
 }
 ?>
