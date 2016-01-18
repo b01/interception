@@ -3,14 +3,18 @@
  * Intercept HTTP request when \fopen or \file_get_contents is called.
  */
 
-use Kshabazz\Interception\InterceptionException;
+use
+	ArrayAccess,
+	Countable,
+	Kshabazz\Interception\InterceptionException,
+	Psr\Http\Message\StreamInterface;
 
 /**
  * Class Http
  *
  * @package Kshabazz\Interception\StreamWrappers
  */
-class Http implements \ArrayAccess, \Countable
+class Http implements StreamInterface, ArrayAccess, Countable
 {
 	const
 		/** @var int */
