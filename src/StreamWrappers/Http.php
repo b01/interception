@@ -5,7 +5,6 @@
 
 use
 	ArrayAccess,
-	Countable,
 	Kshabazz\Interception\InterceptionException,
 	Psr\Http\Message\StreamInterface;
 
@@ -13,8 +12,9 @@ use
  * Class Http
  *
  * @package Kshabazz\Interception\StreamWrappers
+ * TODO: Implement stream interface.
  */
-class Http implements StreamInterface, ArrayAccess, Countable
+class Http implements ArrayAccess
 {
 	const
 		/** @var int */
@@ -607,16 +607,21 @@ class Http implements StreamInterface, ArrayAccess, Countable
 		$writes = NULL;
 		$excepts = NULL;
 		$returnValue = FALSE;
-		if ( FALSE === ($changedStreams = \socket_select($reads, $writes, $excepts, 1, 2)) )
+		$changedStreams = \socket_select($reads, $writes, $excepts, 1, 2);
+
+		if ( $changedStreams === FALSE )
 		{
+			// TODO: Throw exception instead of error.
 			$this->triggerSocketError();
 		}
-		else if ( $changedStreams > 0 )
+
+		if ( $changedStreams > 0 )
 		{
 			$bytes = \socket_recv( $reads[0], $buffer, $pLength, \MSG_WAITALL );
 			// When an error occurs.
 			if ( $bytes === FALSE )
 			{
+				// TODO: Throw exception instead of error.
 				$this->triggerSocketError();
 			}
 			// When there is more data, then return the data.
@@ -625,6 +630,7 @@ class Http implements StreamInterface, ArrayAccess, Countable
 				$returnValue = $buffer;
 			}
 		}
+
 		return $returnValue;
 	}
 
